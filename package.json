@@ -1,0 +1,42 @@
+{
+  "name": "electronjs",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    
+    "google-auth-library": "^9.14.2",
+    "google-spreadsheet": "^4.1.4"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.1.8",
+    "electron": "^33.2.0"
+  },
+  "build": {
+    "appId": "com.example.electronjs",
+    "productName": "QDTT",
+    "files": [
+      "server.js",  
+      "preload.js",  
+      "renderer.js",
+      "getDataFromSheet.js",
+      "index.html", 
+      "icon.ico"     
+    ],
+    "win": {
+      "target": "nsis", 
+      "icon": "icon.ico"
+    },
+    "directories": {
+      "output": "dist"  
+    }
+  }
+}

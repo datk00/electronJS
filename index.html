@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Quy Đổi Tiền Tệ</title>
+    <style>
+        :root[data-theme="light"] {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f0f9ff;
+            --card-background: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --input-background: #ffffff;
+            --result-background: #f3f4f6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --modal-background: rgba(0, 0, 0, 0.5);
+            --button-secondary: #e5e7eb;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --background-color: #111827;
+            --card-background: #1f2937;
+            --text-color: #f3f4f6;
+            --border-color: #374151;
+            --input-background: #374151;
+            --result-background: #272f3d;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --modal-background: rgba(0, 0, 0, 0.7);
+            --button-secondary: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background-color: var(--input-background);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        input::placeholder {
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        button.primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        button.secondary {
+            background-color: var(--button-secondary);
+            color: var(--text-color);
+        }
+
+        .result {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: var(--result-background);
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+            word-wrap: break-word;
+            transition: background-color 0.3s ease;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .checkbox input {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-background);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+
+            animation: show-z .3s ease-in-out;
+        }
+        @keyframes show-z {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .modal-content button {
+            min-width: 100px;
+        }
+        #mainContainer .card {
+            display: flex;
+            gap: 10px;
+        }
+        #mainContainer .card > div {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal tùy chỉnh -->
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+    <div class="container" id="loginContainer">
+        <div class="card">
+            <h2>Đăng nhập</h2>
+            <div class="input-group">
+                <input  type="text" id="usernameInput" placeholder="Tên đăng nhập">
+            </div>
+            <div class="input-group">
+                <input  type="password" id="passwordInput" placeholder="Mật khẩu">
+            </div>
+            <button class="thanhdat2" onclick="login()">Đăng nhập</button>
+            
+        </div>
+    </div>
+
+    <div class="container hidden" id="mainContainer">
+        <h1>Quy Đổi Tiền Tệ</h1>
+        <div class="card">
+            <div class="left-side">
+
+                <div class="input-group">
+                    <label>Số tiền ($)</label>
+                    <input type="number" id="amount" placeholder="Nhập số tiền...">
+                </div>
+    
+                <div class="input-group">
+                    <label>Tỷ giá (VND)</label>
+                    <input type="number" id="rate" placeholder="Nhập tỷ giá...">
+                </div>
+    
+                <div class="input-group">
+                    <label>Kiểu quy đổi</label>
+                    <select id="conversionType">
+                        <option value="*">Nhân (*)</option>
+                        <option value="/"">Chia (/)</option>
+                        <option value="-5%">Giảm 5%</option>
+                        <option value="-10%">Giảm 10%</option>
+                        <option value="-15%">Giảm 15%</option>
+                        <option value="-20%">Giảm 20%</option>
+                    </select>
+                </div>
+    
+                <div class="button-group">
+                    <button onclick="convert()" class="primary">Quy Đổi</button>
+                    <button onclick="reset()" class="secondary">Xóa Sạch</button>
+                </div>
+            </div>
+            <div class="right-side">
+
+                <div class="result" id="result"></div>
+    
+                <div class="options">
+                    <label class="checkbox">
+                        <input type="checkbox" id="pinWindow">
+                        Ghim lên màn hình
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" id="darkMode">
+                        Chế độ tối
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" id="startWithWindows">
+                        Khởi động cùng Windows
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const UNLOCK_KEY = '123456';
+
+        // Theme handling
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('darkMode').checked = savedTheme === 'dark';
+        }
+
+        function toggleTheme(event) {
+            const isDark = event.target.checked;
+            const theme = isDark ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Modal handling
+        function showModal(message) {
+            const modal = document.getElementById('customModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            modal.classList.add('hidden');
+        }
+
+        function login() {
+            const usernameInput = document.querySelector('#usernameInput')
+            const passwordInput = document.querySelector('#passwordInput');
+            console.log(`${usernameInput} ${passwordInput}`);
+            window.electronAPI.validAccount(usernameInput.value, passwordInput.value)
+           
+        }
+
+        function formatNumber(number) {
+            return new Intl.NumberFormat('vi-VN').format(number);
+        }
+
+        function convert() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const conversionType = document.getElementById('conversionType').value;
+            const resultElement = document.getElementById('result');
+
+            if (!amount || !rate) {
+                showModal('Nhập số vào đồ ngu');
+                return;
+            }
+
+            let result;
+            let message;
+
+            switch (conversionType) {
+                case '*':
+                    result = Math.round(amount * rate);
+                    message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} $ * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+                    break;
+                case '/':
+                    if (rate === 0) {
+                        showModal('Không thể chia cho 0. Vui lòng nhập giá trị khác.');
+                        return;
+                    }
+                    result = amount / rate;
+                    message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} VND / ${formatNumber(rate)} = ${result.toFixed(2)} $.`;
+                    break;
+                case '-5%':
+                    result = Math.round(amount * 0.95 * rate);
+                    message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 5% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+                    break;
+                case '-10%':
+                    result = Math.round(amount * 0.9 * rate);
+                    message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 10% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+                    break;
+                case '-15%':
+                    result = Math.round(amount * 0.85 * rate);
+                    message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 15% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+                    break;
+                case '-20%':
+                    result = Math.round(amount * 0.8 * rate);
+                    message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 20% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+                    break;
+            }
+
+            resultElement.textContent = message;
+            navigator.clipboard.writeText(message);
+        }
+
+        function reset() {
+            document.getElementById('amount').value = '';
+            // document.getElementById('rate').value = '';
+            document.getElementById('conversionType').value = '*';
+            document.getElementById('result').textContent = '';
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('darkMode').addEventListener('change', toggleTheme);
+        });
+
+        // Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (document.getElementById('loginContainer').classList.contains('hidden')) {
+                    convert();
+                } else {
+                    login();
+                }
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('customModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+    <script type="module" src="renderer.js"></script>
+</body>
+</html>
