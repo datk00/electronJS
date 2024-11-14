@@ -24,7 +24,10 @@
     "appId": "com.example.electronjs",
     "productName": "QDTT",
     "files": [
-      "src/**/*"
+      "server.js",
+      "src/**/*",
+      "icon.ico",
+      "settings.json"
     ],
     "win": {
       "target": "nsis",
