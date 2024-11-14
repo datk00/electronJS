@@ -100,3 +100,33 @@ function isValidEmail(email) {
 }
 
 // [Rest of your existing code remains the same]
+
+
+const btnLogout = document.querySelector('.logout')
+btnLogout.addEventListener('click', (e) => {
+    e.preventDefault()
+
+    localStorage.setItem('isLoggedIn', false);
+    window.location.href = 'login.html';
+
+
+})
+
+function showModal(message) {
+    // Lấy phần tử modal và phần tử chứa message
+    const modal = document.getElementById("customModal");
+    const modalMessage = document.getElementById("modalMessage");
+
+    // Thêm nội dung thông điệp vào modal
+    modalMessage.textContent = message;
+
+    // Hiển thị modal
+    modal.classList.remove("hidden");
+}
+
+function closeModal() {
+    const modal = document.getElementById("customModal");
+
+    // Ẩn modal
+    modal.classList.add("hidden");
+}

@@ -328,3 +328,9 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.logout {
+    padding: 10px;
+    color: var(--danger-color);
+    margin-left: 10px;
+}

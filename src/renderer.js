@@ -27,6 +27,7 @@ window.electronAPI.ipcRenderer.on('test', (data) => {
             // document.getElementById('mainContainer').classList.remove('hidden');
             // initTheme(); 
         } else {
+            localStorage.setItem('isLoggedIn', false);
             showModal('Thông tin đăng nhập không chính xác')
         }
     }

@@ -24,12 +24,7 @@
     "appId": "com.example.electronjs",
     "productName": "QDTT",
     "files": [
-      "server.js",
-      "preload.js",
-      "renderer.js",
-      "getDataFromSheet.js",
-      "index.html",
-      "icon.ico"
+      "src/**/*"
     ],
     "win": {
       "target": "nsis",
