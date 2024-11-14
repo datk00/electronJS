@@ -220,6 +220,7 @@ button.secondary {
     min-height: 60px;
     word-wrap: break-word;
     transition: background-color 0.3s ease;
+    margin-top: 29px;
 }
 
 .options {
@@ -331,6 +332,14 @@ input[type="number"] {
 
 .logout {
     padding: 10px;
-    color: var(--danger-color);
+    color: #dc2626;
     margin-left: 10px;
-}
+    position: absolute;
+    top: 0;
+    right: 0;
+} 
+.__name {
+    position: absolute;
+    top: 10px;
+    left: 19%;
+} 

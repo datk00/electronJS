@@ -74,6 +74,35 @@
 .flag-icon:hover, .flag-icon.active {
     opacity: 1;
 }
+.notes {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+.notes h3 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.notes ul {
+    list-style-type: none;
+    padding-left: 1rem;
+}
+
+.notes li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+}
+
+.notes li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
     </style>
 </head>
 <body>
@@ -86,10 +115,15 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
+        <a href="" class="logout">
+            <i class="fas fa-right-from-bracket"></i>
+        </a>
+        <p class="__name">Thành Đạt</p>
         <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i>Trang chủ</a>
         <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
         <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
         <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
         <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
         <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
     </div>
@@ -113,7 +147,7 @@
             <div class="left-side">
                 <div class="input-group">
                     <label>Số tiền ($)</label>
-                    <input type="number" id="amount" placeholder="Nhập số tiền...">
+                    <input type="text" id="amount" placeholder="Nhập số tiền..." autofocus>
                 </div>
                 
                 <div class="input-group">
@@ -151,7 +185,15 @@
             </div>
             <div class="right-side">
                 <div class="result" id="result"></div>
-                
+                <div class="notes">
+                    <h3>Ghi chú:</h3>
+                    <ul>
+                        <li>Nhập số tiền và tỷ giá để có kết quả chính xác</li>
+                        <li>Chọn kiểu quy đổi phù hợp</li>
+                        <li>Nhấp vào cờ để thay đổi loại tiền tệ</li>
+                        <li>Nhấn Enter để quy đổi và sao chép kết quả</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -189,5 +231,68 @@
             });
         });
         </script>
+        <script>
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    // Ngăn chặn hành động mặc định (ví dụ như submit form)
+                    e.preventDefault();
+
+                    // Lấy giá trị từ các trường nhập liệu
+                    const amountValue = document.getElementById('amount').value;
+                    const conversionTypeValue = document.getElementById('conversionType').value;
+
+                    // Kiểm tra nếu giá trị nhập liệu hợp lệ
+                    if (amountValue !== '' && conversionTypeValue !== '') {
+                        // Thực hiện convert
+                        convert();
+                        
+                        // Giả sử message là kết quả từ convert() và muốn copy vào clipboard
+                        navigator.clipboard.writeText(message)
+                            .then(() => {
+                                console.log("Đã sao chép kết quả vào clipboard");
+                            })
+                            .catch(err => {
+                                console.error("Lỗi khi sao chép vào clipboard: ", err);
+                            });
+                    } else {
+                        console.log("Vui lòng nhập đủ thông tin.");
+                    }
+
+                    if (document.getElementById('loginContainer').classList.contains('hidden')) {
+                        convert(); // Gọi convert nếu modal đã được ẩn
+                    } else {
+                        login(); // Nếu chưa ẩn, yêu cầu đăng nhập
+                    }
+                }
+            });
+        </script>
+
+<script>
+document.getElementById('amount').addEventListener('input', function(event) {
+    let inputValue = event.target.value;
+    
+    // Tách phần số nguyên và phần thập phân (nếu có)
+    let [integerPart, decimalPart] = inputValue.split('.');
+    
+    // Loại bỏ tất cả ký tự không phải là số từ phần số nguyên
+    integerPart = integerPart.replace(/[^0-9]/g, '');
+    
+    // Chèn dấu phẩy vào phần số nguyên
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    
+    // Nếu có phần thập phân, giữ nguyên và nối lại
+    if (decimalPart !== undefined) {
+        decimalPart = decimalPart.replace(/[^0-9]/g, ''); // Loại bỏ ký tự không phải là số trong phần thập phân
+        inputValue = `${integerPart}.${decimalPart}`;
+    } else {
+        inputValue = integerPart;
+    }
+
+    // Cập nhật lại giá trị vào input
+    event.target.value = inputValue;
+});
+
+
+</script>
 </body>
 </html>

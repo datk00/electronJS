@@ -123,15 +123,17 @@ function closeModal() {
     modal.classList.add('hidden');
 }
 function formatNumber(number) {
-    return new Intl.NumberFormat('vi-VN').format(number);
+    // return new Intl.NumberFormat('vi-VN').format(number);
+    return number.toLocaleString();
 }
 
 function convert() {
-    const amount = parseFloat(document.getElementById('amount').value);
+    var amount = document.getElementById('amount').value
+    console.log(amount)
     const rate = parseFloat(document.getElementById('rate').value);
     const conversionType = document.getElementById('conversionType').value;
     const resultElement = document.getElementById('result');
-
+    amount = amount.replace(',', '')
     if (!amount || !rate) {
         showModal('Nhập số vào đồ ngu');
         return;
@@ -181,16 +183,7 @@ function reset() {
     document.getElementById('conversionType').value = '*';
     document.getElementById('result').textContent = '';
 }
-      // Enter key support
-      document.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            if (document.getElementById('loginContainer').classList.contains('hidden')) {
-                convert();
-            } else {
-                login();
-            }
-        }
-    });
+
 
     // Close modal when clicking outside
     document.getElementById('customModal').addEventListener('click', function(e) {
