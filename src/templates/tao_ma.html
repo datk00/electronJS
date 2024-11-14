@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHẦN MỀM HẬU ĐÀI 7.0 - Tạo mã QR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-link active"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+    </div>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <h1>COMING SOON</h1>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+ 
+    <script src="../renderer.js"></script>
+    <script src="./scriptsHTML_main.js"></script>
+</body>
+</html>

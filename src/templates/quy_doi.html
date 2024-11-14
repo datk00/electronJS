@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy Đổi Tiền Tệ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css/css/flag-icon.min.css">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .rate-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.flag-selector {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.selected-flag .flag-icon {
+    width: 25px;
+    height: 18px;
+    display: inline-block;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.flag-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: var(--shadow);
+    z-index: 100;
+}
+
+.flag-selector:hover .flag-dropdown {
+    display: flex;
+}
+
+.flag-dropdown .flag-icon {
+    width: 25px;
+    height: 18px;
+    display: block;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.flag-dropdown .flag-icon:hover {
+    transform: scale(1.1);
+}
+
+.input-group input {
+    padding-right: 45px !important;
+}
+
+.flag-icon {
+    opacity: 0.7;
+    border: 1px solid var(--border-color);
+}
+
+.flag-icon:hover, .flag-icon.active {
+    opacity: 1;
+}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Modal tùy chỉnh -->
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+
+
+    <div class="container " id="mainContainer">
+        <h1>Quy Đổi Tiền Tệ</h1>
+        <div class="card">
+            <div class="left-side">
+                <div class="input-group">
+                    <label>Số tiền ($)</label>
+                    <input type="number" id="amount" placeholder="Nhập số tiền...">
+                </div>
+                
+                <div class="input-group">
+                    <label>Tỷ giá</label>
+                    <div class="rate-input-container">
+                        <input type="number" id="rate" placeholder="Nhập tỷ giá...">
+                        <div class="flag-selector">
+                            <div class="selected-flag">
+                                <span class="flag-icon flag-icon-us active" data-rate="24150" data-currency="USD"></span>
+                            </div>
+                            <div class="flag-dropdown">
+                                <span class="flag-icon flag-icon-us" data-rate="24150" data-currency="USD"></span>
+                                <span class="flag-icon flag-icon-cn" data-rate="3300" data-currency="CNY"></span>
+                                <span class="flag-icon flag-icon-kh" data-rate="5900" data-currency="KHR"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Kiểu quy đổi</label>
+                    <select id="conversionType">
+                        <option value="*">Nhân (*)</option>
+                        <option value="/">Chia (/)</option>
+                        <option value="-5%">Giảm 5%</option>
+                        <option value="-10%">Giảm 10%</option>
+                        <option value="-15%">Giảm 15%</option>
+                        <option value="-20%">Giảm 20%</option>
+                    </select>
+                </div>
+    
+                <div class="button-group">
+                    <button onclick="convert()" class="primary">Quy Đổi</button>
+                    <button onclick="reset()" class="secondary">Xóa Sạch</button>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="result" id="result"></div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+    <script src="checkLogin.js"></script>
+    <script src="scriptsHTML_main.js"></script>
+    <script type="module" src="../renderer.js"></script>
+    <script>
+        // Thêm vào phần script hiện có
+        document.addEventListener('DOMContentLoaded', function() {
+            const flagSelector = document.querySelector('.flag-selector');
+            const rateInput = document.getElementById('rate');
+            const selectedFlag = document.querySelector('.selected-flag');
+            const flags = document.querySelectorAll('.flag-dropdown .flag-icon');
+        
+            flags.forEach(flag => {
+                flag.addEventListener('click', function() {
+                    // Cập nhật giao diện
+                    const currentSelected = document.querySelector('.selected-flag .flag-icon');
+                    currentSelected.className = this.className;
+                    currentSelected.dataset.rate = this.dataset.rate;
+                    currentSelected.dataset.currency = this.dataset.currency;
+        
+                    // Cập nhật giá trị input
+                    rateInput.value = this.dataset.rate;
+                });
+            });
+        });
+        </script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài Đặt</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root[data-theme="light"] {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f0f9ff;
+            --card-background: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --input-background: #ffffff;
+            --toggle-bg: #e5e7eb;
+            --toggle-active: #2563eb;
+            --navbar-background: #ffffff;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --background-color: #111827;
+            --card-background: #1f2937;
+            --text-color: #f3f4f6;
+            --border-color: #374151;
+            --input-background: #374151;
+            --toggle-bg: #4b5563;
+            --toggle-active: #60a5fa;
+            --navbar-background: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding-top: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .settings-card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--input-background);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            transform: translateX(5px);
+        }
+
+        .setting-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .setting-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 10px;
+            font-size: 1.2rem;
+        }
+
+        .setting-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .setting-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .setting-description {
+            font-size: 0.875rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        /* Modern Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-bg);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--toggle-active);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+     
+    </style>
+    <link rel="stylesheet" href="./css/style.css">
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+    </div>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container">
+        <div class="settings-card">
+            <h1>Cài Đặt</h1>
+            <div class="settings-group">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-icon">
+                            <i class="fas fa-thumbtack"></i>
+                        </div>
+                        <div class="setting-text">
+                            <span class="setting-title">Ghim lên màn hình</span>
+                            <span class="setting-description">Luôn hiển thị ứng dụng trên cùng</span>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="pinWindow">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div class="setting-text">
+                            <span class="setting-title">Chế độ tối</span>
+                            <span class="setting-description">Giao diện tối màu dễ chịu cho mắt</span>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="darkMode">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-icon">
+                            <i class="fas fa-power-off"></i>
+                        </div>
+                        <div class="setting-text">
+                            <span class="setting-title">Khởi động cùng Windows</span>
+                            <span class="setting-description">Tự động chạy khi khởi động máy tính</span>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="startWithWindows">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="setting-text">
+                            <span class="setting-title">Email thông báo</span>
+                            <span class="setting-description">Nhận thông báo qua email</span>
+                            <input type="email" id="notificationEmail" class="email-input" placeholder="Nhập email của bạn">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="setting-text">
+                            <span class="setting-title">Thông báo</span>
+                            <span class="setting-description">Sẽ nhận được thông báo khi có bản cập nhật</span>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifications">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+    <script src="scriptsHTML_main.js"></script>
+    
+</body>
+</html>

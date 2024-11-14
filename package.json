@@ -12,31 +12,31 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    
     "google-auth-library": "^9.14.2",
-    "google-spreadsheet": "^4.1.4"
+    "google-spreadsheet": "^4.1.4",
+    "node-json-db": "^2.3.0"
   },
   "devDependencies": {
-    "electron-builder": "^25.1.8",
-    "electron": "^33.2.0"
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
   },
   "build": {
     "appId": "com.example.electronjs",
     "productName": "QDTT",
     "files": [
-      "server.js",  
-      "preload.js",  
+      "server.js",
+      "preload.js",
       "renderer.js",
       "getDataFromSheet.js",
-      "index.html", 
-      "icon.ico"     
+      "index.html",
+      "icon.ico"
     ],
     "win": {
-      "target": "nsis", 
+      "target": "nsis",
       "icon": "icon.ico"
     },
     "directories": {
-      "output": "dist"  
+      "output": "dist"
     }
   }
 }
