@@ -111,22 +111,90 @@ btnLogout.addEventListener('click', (e) => {
 
 
 })
-
 function showModal(message) {
-    // Lấy phần tử modal và phần tử chứa message
-    const modal = document.getElementById("customModal");
-    const modalMessage = document.getElementById("modalMessage");
-
-    // Thêm nội dung thông điệp vào modal
+    const modal = document.getElementById('customModal');
+    const modalMessage = document.getElementById('modalMessage');
     modalMessage.textContent = message;
-
-    // Hiển thị modal
-    modal.classList.remove("hidden");
+    modal.classList.remove('hidden');
 }
 
 function closeModal() {
-    const modal = document.getElementById("customModal");
-
-    // Ẩn modal
-    modal.classList.add("hidden");
+    const modal = document.getElementById('customModal');
+    modal.classList.add('hidden');
 }
+function formatNumber(number) {
+    return new Intl.NumberFormat('vi-VN').format(number);
+}
+
+function convert() {
+    const amount = parseFloat(document.getElementById('amount').value);
+    const rate = parseFloat(document.getElementById('rate').value);
+    const conversionType = document.getElementById('conversionType').value;
+    const resultElement = document.getElementById('result');
+
+    if (!amount || !rate) {
+        showModal('Nhập số vào đồ ngu');
+        return;
+    }
+
+    let result;
+    let message;
+
+    switch (conversionType) {
+        case '*':
+            result = Math.round(amount * rate);
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} $ * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            break;
+        case '/':
+            if (rate === 0) {
+                showModal('Không thể chia cho 0. Vui lòng nhập giá trị khác.');
+                return;
+            }
+            result = amount / rate;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} VND / ${formatNumber(rate)} = ${result.toFixed(2)} $.`;
+            break;
+        case '-5%':
+            result = Math.round(amount * 0.95 * rate);
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 5% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            break;
+        case '-10%':
+            result = Math.round(amount * 0.9 * rate);
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 10% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            break;
+        case '-15%':
+            result = Math.round(amount * 0.85 * rate);
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 15% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            break;
+        case '-20%':
+            result = Math.round(amount * 0.8 * rate);
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 20% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            break;
+    }
+
+    resultElement.textContent = message;
+    navigator.clipboard.writeText(message);
+}
+
+function reset() {
+    document.getElementById('amount').value = '';
+    // document.getElementById('rate').value = '';
+    document.getElementById('conversionType').value = '*';
+    document.getElementById('result').textContent = '';
+}
+      // Enter key support
+      document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            if (document.getElementById('loginContainer').classList.contains('hidden')) {
+                convert();
+            } else {
+                login();
+            }
+        }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('customModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
