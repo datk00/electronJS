@@ -122,19 +122,22 @@ function closeModal() {
     const modal = document.getElementById('customModal');
     modal.classList.add('hidden');
 }
-function formatNumber(number) {
-    // return new Intl.NumberFormat('vi-VN').format(number);
-    return number.toLocaleString();
+function formatNumber(num) {
+    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
-
 function convert() {
-    var amount = document.getElementById('amount').value
-    console.log(amount)
+    var amount = document.getElementById('amount').value;
     const rate = parseFloat(document.getElementById('rate').value);
     const conversionType = document.getElementById('conversionType').value;
     const resultElement = document.getElementById('result');
-    amount = amount.replace(',', '')
-    if (!amount || !rate) {
+
+    // Loại bỏ dấu phẩy trong phần số nguyên trước khi chuyển thành số
+    amount = amount.replace(/,/g, '');  // Loại bỏ tất cả dấu phẩy
+
+    // Chuyển đổi amount thành số thực
+    amount = parseFloat(amount);  // parseFloat() sẽ trả về NaN nếu input không hợp lệ
+
+    if (isNaN(amount) || isNaN(rate)) {
         showModal('Nhập số vào đồ ngu');
         return;
     }
@@ -144,7 +147,7 @@ function convert() {
 
     switch (conversionType) {
         case '*':
-            result = Math.round(amount * rate);
+            result = amount * rate;
             message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} $ * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
             break;
         case '/':
@@ -153,29 +156,31 @@ function convert() {
                 return;
             }
             result = amount / rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} VND / ${formatNumber(rate)} = ${result.toFixed(2)} $.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} VND / ${formatNumber(rate)} = ${formatNumber(result)} $.`;
             break;
         case '-5%':
-            result = Math.round(amount * 0.95 * rate);
+            result = amount * 0.95 * rate;
             message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 5% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
             break;
         case '-10%':
-            result = Math.round(amount * 0.9 * rate);
+            result = amount * 0.9 * rate;
             message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 10% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
             break;
         case '-15%':
-            result = Math.round(amount * 0.85 * rate);
+            result = amount * 0.85 * rate;
             message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 15% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
             break;
         case '-20%':
-            result = Math.round(amount * 0.8 * rate);
+            result = amount * 0.8 * rate;
             message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 20% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
             break;
     }
 
+    // Hiển thị kết quả và sao chép vào clipboard
     resultElement.textContent = message;
     navigator.clipboard.writeText(message);
 }
+
 
 function reset() {
     document.getElementById('amount').value = '';

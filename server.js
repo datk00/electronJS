@@ -56,7 +56,7 @@ ipcMain.on('test', async (event, value) => {
     if (DataFromSheet) {
         event.reply('test', JSON.stringify({
             action: 'get-rate',
-            data: DataFromSheet.dataRate[1],
+            data: DataFromSheet.dataRate,
         }));
     }
 });

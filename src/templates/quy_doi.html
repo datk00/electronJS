@@ -153,15 +153,15 @@
                 <div class="input-group">
                     <label>Tỷ giá</label>
                     <div class="rate-input-container">
-                        <input type="number" id="rate" placeholder="Nhập tỷ giá...">
+                        <input type="number" id="rate" rate-type="USD" placeholder="Nhập tỷ giá...">
                         <div class="flag-selector">
                             <div class="selected-flag">
                                 <span class="flag-icon flag-icon-us active" data-rate="24150" data-currency="USD"></span>
                             </div>
                             <div class="flag-dropdown">
-                                <span class="flag-icon flag-icon-us" data-rate="25000" data-currency="USD"></span>
-                                <span class="flag-icon flag-icon-cn" data-rate="3507" data-currency="CNY"></span>
-                                <span class="flag-icon flag-icon-kh" data-rate="5.70" data-currency="KHR"></span>
+                                <span class="flag-icon flag-icon-us rate-us" data-rate="25000" data-currency="USD"></span>
+                                <span class="flag-icon flag-icon-cn rate-cn" data-rate="3507" data-currency="CNY"></span>
+                                <span class="flag-icon flag-icon-kh rate-cam" data-rate="5.70" data-currency="KHR"></span>
                             </div>
                         </div>
                     </div>
@@ -188,10 +188,14 @@
                 <div class="notes">
                     <h3>Ghi chú:</h3>
                     <ul>
-                        <li>Nhập số tiền và tỷ giá để có kết quả chính xác</li>
-                        <li>Chọn kiểu quy đổi phù hợp</li>
-                        <li>Nhấp vào cờ để thay đổi loại tiền tệ</li>
-                        <li>Nhấn Enter để quy đổi và sao chép kết quả</li>
+                        <li>😀Nhập số tiền bạn muốn chuyển đổi: Gõ vào ô "Số tiền" số tiền bạn cần quy đổi từ tiền tệ nguồn (ví dụ: USD, CNY, KHR) sang VND.</li>
+                        <li>Tỷ giá tự động cập nhật: Tỷ giá quy đổi sẽ được cập nhật tự động theo thời gian thực. Mỗi lần bạn sử dụng công cụ, tỷ giá sẽ được lấy từ nguồn tin cậy và có thể thay đổi tùy theo thị trường.
+                            Chọn loại tiền tệ quy đổi: Tại ô "Kiểu quy đổi", bạn có thể chọn các loại tiền tệ để quy đổi như CNY
+                            , USD
+                            , KHR
+                            , và nhiều loại tiền tệ khác.</li>
+                        <li>Bấm 'Quy Đổi' hoặc nhấn 'Enter': Sau khi nhập số tiền và chọn loại tiền tệ quy đổi, bạn có thể nhấn nút 'Quy Đổi' hoặc nhấn phím 'Enter' trên bàn phím để thực hiện quy đổi. Kết quả sẽ được hiển thị ngay lập tức và tự động sao chép vào bộ nhớ để bạn dễ dàng dán (paste) ở nơi khác.</li>
+                        <li>CTRL X: xóa nhanh</li>
                     </ul>
                 </div>
             </div>
@@ -226,6 +230,7 @@
                     currentSelected.dataset.currency = this.dataset.currency;
         
                     // Cập nhật giá trị input
+                    rateInput.setAttribute('rate-type', currentSelected.getAttribute('data-currency'))
                     rateInput.value = this.dataset.rate;
                 });
             });
@@ -264,34 +269,30 @@
                         login(); // Nếu chưa ẩn, yêu cầu đăng nhập
                     }
                 }
+                if (e.ctrlKey && e.key === 'x') {
+                    reset()
+                }
             });
         </script>
 
 <script>
-document.getElementById('amount').addEventListener('input', function(event) {
-    let inputValue = event.target.value;
-    
-    // Tách phần số nguyên và phần thập phân (nếu có)
-    let [integerPart, decimalPart] = inputValue.split('.');
-    
-    // Loại bỏ tất cả ký tự không phải là số từ phần số nguyên
-    integerPart = integerPart.replace(/[^0-9]/g, '');
-    
-    // Chèn dấu phẩy vào phần số nguyên
-    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    
-    // Nếu có phần thập phân, giữ nguyên và nối lại
-    if (decimalPart !== undefined) {
-        decimalPart = decimalPart.replace(/[^0-9]/g, ''); // Loại bỏ ký tự không phải là số trong phần thập phân
-        inputValue = `${integerPart}.${decimalPart}`;
-    } else {
-        inputValue = integerPart;
-    }
+    document.getElementById('amount').addEventListener('input', function(event) {
+        let inputValue = event.target.value;
+        
+        let [integerPart, decimalPart] = inputValue.split('.');
 
-    // Cập nhật lại giá trị vào input
-    event.target.value = inputValue;
-});
+        integerPart = integerPart.replace(/[^0-9]/g, ''); // Loại bỏ các ký tự không phải là số
+        integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Thêm dấu phẩy phân cách hàng nghìn
 
+        if (decimalPart !== undefined) {
+            decimalPart = decimalPart.replace(/[^0-9]/g, ''); // Loại bỏ các ký tự không phải là số trong phần thập phân
+            inputValue = `${integerPart}.${decimalPart}`;
+        } else {
+            inputValue = integerPart;
+        }
+
+        event.target.value = inputValue;
+    });
 
 </script>
 </body>
