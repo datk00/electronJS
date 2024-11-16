@@ -3,7 +3,7 @@ const path = require('node:path');
 const getDataFromGgsheet = require('./src/getDataFromSheet.js');
 const { JsonDB, Config } = require('node-json-db');
 const db = new JsonDB(new Config("settings", true, false, '/'));
-
+const QRCode = require('qrcode')
 var DataFromSheet = null;
 let mainWindow;
 
@@ -117,6 +117,51 @@ app.whenReady().then(async () => {
             createWindow();
         }
     });
+});
+
+
+// Handle QR code generation
+ipcMain.handle('generate-qr', async (event, data) => {
+    try {
+        const { content, errorCorrection, size } = data;
+        const options = {
+            errorCorrectionLevel: errorCorrection,
+            width: parseInt(size),
+            margin: 1,
+            color: {
+                dark: '#000000',
+                light: '#ffffff'
+            }
+        };
+
+        // Generate QR code as data URL
+        const dataUrl = await QRCode.toDataURL(content, options);
+        return { success: true, dataUrl };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+});
+
+// Handle QR code download
+ipcMain.handle('download-qr', async (event, data) => {
+    try {
+        const { content, errorCorrection, size, filePath } = data;
+        const options = {
+            errorCorrectionLevel: errorCorrection,
+            width: parseInt(size),
+            margin: 1,
+            color: {
+                dark: '#000000',
+                light: '#ffffff'
+            }
+        };
+
+        // Generate QR code and save to file
+        await QRCode.toFile(filePath, content, options);
+        return { success: true };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
 });
 
 // Khi tất cả cửa sổ đóng

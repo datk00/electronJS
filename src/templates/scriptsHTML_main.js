@@ -1,10 +1,15 @@
 // Elements
+var name_user = document.querySelector('.__name')
+name_user.textContent = localStorage.getItem('userName')
+
 const darkModeToggle = document.getElementById('darkMode');
 const pinAppToggle = document.getElementById('pinWindow');
 const startAppWithWindowsToggle = document.getElementById('startWithWindows');
 const notificationsToggle = document.getElementById('notifications');
 const emailInput = document.getElementById('notificationEmail');
 const htmlElement = document.documentElement;
+
+
 
 // Load preferences from localStorage
 function loadDarkModePreference() {
@@ -125,7 +130,12 @@ function closeModal() {
 function formatNumber(num) {
     return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+function formatNumberVnd(num) {
+    return num.toLocaleString()
+}
+
 function convert() {
+    var rateInput = document.querySelector('#rate')
     var amount = document.getElementById('amount').value;
     const rate = parseFloat(document.getElementById('rate').value);
     const conversionType = document.getElementById('conversionType').value;
@@ -142,13 +152,24 @@ function convert() {
         return;
     }
 
+    var charM = null;
+    const atb_rate = rateInput.getAttribute('rate-type')
+    if (atb_rate == 'USD') {
+        charM = '$';
+    }else if (atb_rate == 'CNY') {
+        charM = '¥';
+    }else if (atb_rate == 'KHR') {
+        charM = '៛';
+    }
+
+
     let result;
     let message;
 
     switch (conversionType) {
         case '*':
             result = amount * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} $ * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} ${charM} * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '/':
             if (rate === 0) {
@@ -156,23 +177,23 @@ function convert() {
                 return;
             }
             result = amount / rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} VND / ${formatNumber(rate)} = ${formatNumber(result)} $.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumberVnd(amount)} VND / ${formatNumberVnd(rate)} = ${formatNumber(result)} ${charM}.`;
             break;
         case '-5%':
             result = amount * 0.95 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 5% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 5% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '-10%':
             result = amount * 0.9 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 10% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 10% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '-15%':
             result = amount * 0.85 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 15% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 15% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '-20%':
             result = amount * 0.8 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} $ - 20% * ${formatNumber(rate)} = ${formatNumber(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 20% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
     }
 
@@ -196,3 +217,11 @@ function reset() {
             closeModal();
         }
     });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            closeModal()
+        }
+    })
+
+

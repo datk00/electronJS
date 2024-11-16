@@ -19,16 +19,102 @@
             <i class="fas fa-right-from-bracket"></i>
         </a>
         <p class="__name">Thành Đạt</p>
-        <a href="index.html" class="sidebar-link active"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="index.html" class="sidebar-link "><i class="fas fa-home"></i>Trang chủ</a>
         <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
         <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
         <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
-        <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
+        <a href="thue.html" class="sidebar-link active"><i class="fas fa-tarp"></i>Thuế</a>
         <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
         <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
     </div>
+
+
     <div class="overlay" onclick="toggleSidebar()"></div>
-    <h1>COMING SOON</h1>
+
+    <!-- Modal tùy chỉnh -->
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="card">
+            <h1>Đổi Thuế</h1>
+            <div class="row flex1-1-for-child">
+
+                <div>
+                    <div class="row flex1-1-for-child">
+                        <div class="input-group">
+                            <label for="value2">Số tiền thuế ($)</label>
+                            <input class="inputValueFormat" type="text" id="value2" placeholder="Nhập số tiền thuế" required autofocus>
+                        </div>
+                        <div class="input-group">
+                            <label for="value3">Số tiền nhận lại ($)</label>
+                            <input class="inputValueFormat" type="text" id="value3" placeholder="Nhập số tiền nhận lại" required>
+                        </div>
+                    </div>
+        
+                    <div class="row flex1-1-for-child">
+                        <div class="input-group">
+                            <label for="rate">Tỷ giá</label>
+                            <input type="number" id="rate_thue" placeholder="Tỷ giá" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label for="operation">Chọn phép tính</label>
+                            <select id="operation">
+                                <option value="*">*</option>
+                                <option value="+">+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="button primary" onclick="calculate()">Tính toán</button>
+                        <button class="button secondary" onclick="reset_thue()">Xóa hết</button>
+                    </div>
+                </div>
+                
+    
+                <div class="result" id="result">
+                    Kết quả sẽ hiển thị ở đây.
+                </div>
+
+            </div>
+            <div>
+                <p style="color: #5FA3F7;">Tab: chuyển sang ô nhập kế tiếp</p>
+                <p style="color: #5FA3F7;">Shift Tab: chuyển về sang ô nhập vừa trước</p>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        const allInputValueFormat = document.querySelectorAll('.inputValueFormat')
+
+        allInputValueFormat.forEach(inputTarget => {
+            inputTarget.addEventListener('input', function(event) {
+            let inputValue = event.target.value;
+            
+            let [integerPart, decimalPart] = inputValue.split('.');
+    
+            integerPart = integerPart.replace(/[^0-9]/g, ''); // Loại bỏ các ký tự không phải là số
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Thêm dấu phẩy phân cách hàng nghìn
+    
+            if (decimalPart !== undefined) {
+                decimalPart = decimalPart.replace(/[^0-9]/g, ''); // Loại bỏ các ký tự không phải là số trong phần thập phân
+                inputValue = `${integerPart}.${decimalPart}`;
+            } else {
+                inputValue = integerPart;
+            }
+    
+            event.target.value = inputValue;
+            });
+        })
+
+    </script>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -37,8 +123,99 @@
             overlay.classList.toggle('active');
         }
     </script>
- 
-    <script src="../renderer.js"></script>
+    <script>
+        function formatNumber(num) {
+                return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+        function formatNumberVnd(num) {
+            return num.toLocaleString()
+        }
+        function calculate() {
+            let thue = document.getElementById('value2').value;
+            thue = parseFloat(thue.replace(',', ''))
+
+            let tien_nhan = document.getElementById('value3').value;
+            tien_nhan = parseFloat(tien_nhan.replace(',', ''))
+
+            const rate = parseInt(document.getElementById('rate_thue').value);
+            const operation = document.getElementById('operation').value;
+            const resultElement = document.getElementById('result');
+
+            console.log(thue)
+            console.log(tien_nhan)
+            if (isNaN(thue) || isNaN(tien_nhan)) {
+                // showModal("Vui lòng nhập giá trị hợp lệ")
+                return;
+            }
+
+            if (operation === '*') {
+                let thue_vnd = Math.round(thue * rate);
+                let tien_nhan_vnd = Math.round(tien_nhan * rate);
+                resultElement.textContent = `
+Chào bạn. Sau khi hoàn tất việc thanh toán xác nhận khoản tiền thuế ${formatNumber(thue)} $ = ${formatNumberVnd(thue_vnd)} VND, số tiền bạn rút và tiền thuế sẽ được thanh toán cho bạn cùng nhau trong vòng 30 phút. Tổng số tiền bạn nhận lại là ${formatNumber(tien_nhan)} $ = ${formatNumberVnd(tien_nhan_vnd)} VND. Căn cứ theo Nghị quyết số 51/2001/QH10 luật doanh nghiệp của Chi Cục Thuế Nhà Nước, vui lòng hợp tác với người bán để hoàn thành các yêu cầu về nộp thuế. Cảm ơn!
+                
+                `;
+            } else {
+                let thue_vnd = Math.round(thue * rate);
+                tien_nhan += thue
+                let tien_nhan_vnd = Math.round((thue + tien_nhan) * rate);
+                resultElement.textContent = `
+Chào bạn. Sau khi hoàn tất việc thanh toán xác nhận khoản tiền thuế ${formatNumber(thue)} $ = ${formatNumberVnd(thue_vnd)} VND, số tiền bạn rút và tiền thuế sẽ được thanh toán cho bạn cùng nhau trong vòng 30 phút. Tổng số tiền bạn nhận lại là ${formatNumber(tien_nhan)} $ = ${formatNumberVnd(tien_nhan_vnd)} VND. Căn cứ theo Nghị quyết số 51/2001/QH10 luật doanh nghiệp của Chi Cục Thuế Nhà Nước, vui lòng hợp tác với người bán để hoàn thành các yêu cầu về nộp thuế. Cảm ơn!
+                
+                `;
+            }
+        }
+
+        function reset_thue() {
+            document.getElementById('value2').value = '';
+            document.getElementById('value3').value = '';
+            document.getElementById('result').textContent = '';
+        }
+
+    </script>
+    <script>
+                
+
+        var RATE = null;
+
+
+        var rate_thue = document.getElementById('rate_thue');
+
+
+        window.electronAPI.ipcRenderer.send("test", 'connected successfully');
+        setInterval(() => {
+            window.electronAPI.ipcRenderer.send("test", 'connected successfully');
+        }, 10000)
+
+
+        window.electronAPI.ipcRenderer.on('test', (data) => {
+
+            const parseJSON = JSON.parse(data)
+            console.log(parseJSON)
+            console.log(parseJSON.action == 'get-rate')
+            if (parseJSON.action == 'get-rate') {
+      
+                rate_thue.value = parseInt(parseJSON.data[1])
+                // RATE = parseJSON.data
+                // updateRATE()
+            }
+
+        })
+
+
+
+    </script>
+    <script>
+        document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            calculate()
+            }
+        if (e.ctrlKey && e.key === 'x') {
+            reset_thue()
+            }
+        })
+        
+    </script>
     <script src="./scriptsHTML_main.js"></script>
 </body>
 </html>

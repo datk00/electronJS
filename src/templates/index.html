@@ -723,16 +723,7 @@ body {
 
         
     </main>
-    <script>
-        window.onload = function() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    console.log(isLoggedIn)
-    // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang login
-    if (!isLoggedIn) {
-      window.location.href = './login.html';
-    }
-  };
-    </script>
+    <script src="./checkLogin.js"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -780,6 +771,6 @@ counters.forEach(counter => {
     </script>
     <script src="./scriptsHTML_main.js"></script>
 
-    <!-- <script src="./checkLogin.js"></script> -->
+
 </body>
 </html>

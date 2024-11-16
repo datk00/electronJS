@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
         },
         on: (channel, func) => {
             ipcRenderer.on(channel, (event, ...args) => func(...args));
-        }
+        },
+        generateQR: (data) => ipcRenderer.invoke('generate-qr', data),
+        downloadQR: (data) => ipcRenderer.invoke('download-qr', data),
     }
 });
