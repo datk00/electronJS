@@ -636,6 +636,37 @@ body {
     background: var(--card-background);
     color: var(--text-color);
 }
+.background-selector h3 {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.checkbox input[type="radio"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.bg1 { background-image: url('./images/bg1.jpg'); }
+.bg2 { background-image: url('./images/bg2.jpg'); }
+.bg3 { background-image: url('./images/bg3.jpg'); }
+.bg4 { background-image: url('./images/bg4.jpg'); }
+
+body.bg1, body.bg2, body.bg3, body.bg4 {
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.3s ease;
+}
     </style>
     <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -659,7 +690,30 @@ body {
         <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
         <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
         <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg2" onchange="selectBackground('bg2')" />
+                <span class="background-image bg2"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+        </div>
     </div>
+    
     <div class="overlay" onclick="toggleSidebar()"></div>
 
     <main class="main-content">
@@ -723,6 +777,7 @@ body {
 
         
     </main>
+
     <script src="./checkLogin.js"></script>
     <script>
         function toggleSidebar() {

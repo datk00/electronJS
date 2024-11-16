@@ -29,6 +29,28 @@
         <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
         <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
         <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg2" onchange="selectBackground('bg2')" />
+                <span class="background-image bg2"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+        </div>
     </div>
     <div class="overlay" onclick="toggleSidebar()"></div>
     <!-- Modal tùy chỉnh -->
@@ -60,68 +82,68 @@
                             </div>
             
                             <div class="input-group">
-                                <label for="documentType">Document Type</label>
+                                <label for="documentType">Loại Tài Liệu (mặc định)</label>
                                 <input type="text" id="documentType" placeholder="P" value="P" readonly>
                             </div>
                             <div class="input-group">
-                                <label for="issuingCountry">Issuing Country</label>
-                                <input type="text" id="issuingCountry" placeholder="BGR" value="BGR">
+                                <label for="issuingCountry">Quốc Gia</label>
+                                <input type="text" id="issuingCountry" placeholder="BGR" >
                             </div>
                         </div>
                         
                         <div class="row flex1-1-for-child">
                             <div class="input-group">
-                                <label for="documentNumber">Document Number</label>
-                                <input type="text" id="documentNumber" placeholder="U9KJKVKXS" value="U9KJKVKXS">
+                                <label for="documentNumber">Số định danh</label>
+                                <input type="text" id="documentNumber" placeholder="U9KJKVKXS">
                             </div>
                             <div class="input-group">
-                                <label for="birthDate">Birth Date</label>
-                                <input type="text" id="birthDate" placeholder="610927" value="610927">
+                                <label for="birthDate">Sinh nhật</label>
+                                <input type="text" id="birthDate" placeholder=" (năm/tháng/ngày), ví dụ 241204 " >
                             </div>
             
                             <div class="input-group">
-                                <label for="sex">Sex</label>
-                                <input type="text" id="sex" placeholder="M" list="gfd">
+                                <label for="sex">Giới tính</label>
+                                <input type="text" id="sex" placeholder="M: Nam, F: Nữ" list="gfd">
                                 <datalist id="gfd">
-                                    <option value="M">Male</option>
-                                    <option value="F">Female</option>
+                                    <option value="M">Nam</option>
+                                    <option value="F">Nữ</option>
                                 </datalist>
                             </div>
                         </div>
                         <div class="row flex1-1-for-child">
                             <div class="input-group">
-                                <label for="expiryDate">Expiry Date</label>
-                                <input type="text" id="expiryDate" placeholder="321003" >
+                                <label for="expiryDate">Ngày hết hạn</label>
+                                <input type="text" id="expiryDate" placeholder="(năm/tháng/ngày), ví dụ 241204" >
                             </div>
                             <div class="input-group">
-                                <label for="nationality">Nationality</label>
+                                <label for="nationality">Quốc tịch</label>
                                 <input type="text" id="nationality" placeholder="BGR" >
                             </div>
                             <div class="input-group">
-                                <label for="surname">Surname</label>
-                                <input type="text" id="surname" placeholder="Thanhdat" >
+                                <label for="surname">Tên họ</label>
+                                <input type="text" id="surname" placeholder="Nguyen" >
                             </div>
                         </div>
                         <div class="row flex1-1-for-child">
                             <div class="input-group">
-                                <label for="givenNames">Given Names</label>
-                                <input type="text" id="givenNames" placeholder="Ann" value="Ann">
+                                <label for="givenNames">Tên đệm và tên</label>
+                                <input type="text" id="givenNames" placeholder="Ann" >
                             </div>
                             <div class="input-group">
-                                <label for="optiona1">optional data 1</label>
-                                <input type="text" id="optional1" placeholder="..." value="...">
+                                <label for="optiona1">Dữ liệu không bắt buộc (1)</label>
+                                <input type="text" id="optional1" placeholder="..." >
                             </div>
                             <div class="input-group">
-                                <label for="optional2">optional data 2</label>
-                                <input type="text" id="optional2" placeholder="..." value="...">
+                                <label for="optional2">Dữ liệu không bắt buộc (2)</label>
+                                <input type="text" id="optional2" placeholder="..." >
                             </div>
                         </div>
                     
                     </div>
         
                     <div class="button-group">
-                        <button class="primary" onclick="random_riz()">GENERATE RANDOM</button>
-                        <button class="primary" onclick="create_riz()">GENERATE</button>
+                        <button class="primary" onclick="random_riz()">TẠO NGẪU NHIÊN</button>
+                        <button class="primary" onclick="create_riz()">TẠO</button>
                     </div>
                 </div>
     
@@ -131,6 +153,24 @@
             </div>
         </div>
     </div>
+    <script>
+        const mrzTypeSelect = document.getElementById('mrzType');
+
+        // Thêm sự kiện 'change'
+        mrzTypeSelect.addEventListener('change', function() {
+            // Lấy giá trị của option được chọn
+            let docType = document.querySelector("#documentType")
+
+            const selectedValue = mrzTypeSelect.value;
+            if (selectedValue == "TD1" || selectedValue == "TD2") {
+                docType.value = "I"
+            }else if (selectedValue == "TD3" ) {
+                docType.value = "P"
+            }else if (selectedValue == "MRVA" || selectedValue == "MRVB") {
+                docType.value = "V"
+            }
+        });
+    </script>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -161,6 +201,7 @@
             const __birthDate = document.querySelector('#birthDate')
             const __expiry_date = document.querySelector('#expiryDate')
             const __result = document.querySelector('.result')
+            const __country = document.querySelector('#issuingCountry')
 
             const mrz_type = document.querySelector('#mrzType').value
             const url = "https://www.dynamsoft.com/api-common/api/marketing/generateMRZ";
@@ -206,6 +247,7 @@
                         __document_number.value = result.document_number
                         __birthDate.value = result.birth_date
                         __expiry_date.value = result.expiry_date
+                        __country.value = result.nationality
                         console.log(result)
                         __result.textContent = result.MRZ
                         navigator.clipboard.writeText(__result.textContent);

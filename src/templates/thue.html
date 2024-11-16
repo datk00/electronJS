@@ -26,6 +26,28 @@
         <a href="thue.html" class="sidebar-link active"><i class="fas fa-tarp"></i>Thuế</a>
         <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
         <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg2" onchange="selectBackground('bg2')" />
+                <span class="background-image bg2"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+        </div>
     </div>
 
 
@@ -61,7 +83,7 @@
                     <div class="row flex1-1-for-child">
                         <div class="input-group">
                             <label for="rate">Tỷ giá</label>
-                            <input type="number" id="rate_thue" placeholder="Tỷ giá" readonly>
+                            <input type="number" id="rate_thue" placeholder="Tỷ giá">
                         </div>
                         <div class="input-group">
                             <label for="operation">Chọn phép tính</label>
@@ -151,18 +173,23 @@
             if (operation === '*') {
                 let thue_vnd = Math.round(thue * rate);
                 let tien_nhan_vnd = Math.round(tien_nhan * rate);
-                resultElement.textContent = `
+                let content =  `
 Chào bạn. Sau khi hoàn tất việc thanh toán xác nhận khoản tiền thuế ${formatNumber(thue)} $ = ${formatNumberVnd(thue_vnd)} VND, số tiền bạn rút và tiền thuế sẽ được thanh toán cho bạn cùng nhau trong vòng 30 phút. Tổng số tiền bạn nhận lại là ${formatNumber(tien_nhan)} $ = ${formatNumberVnd(tien_nhan_vnd)} VND. Căn cứ theo Nghị quyết số 51/2001/QH10 luật doanh nghiệp của Chi Cục Thuế Nhà Nước, vui lòng hợp tác với người bán để hoàn thành các yêu cầu về nộp thuế. Cảm ơn!
                 
                 `;
+                resultElement.textContent = content
+                navigator.clipboard.writeText(content)
             } else {
                 let thue_vnd = Math.round(thue * rate);
                 tien_nhan += thue
-                let tien_nhan_vnd = Math.round((thue + tien_nhan) * rate);
-                resultElement.textContent = `
+                let tien_nhan_vnd = Math.round((thue + tien_nhan) * rate); 
+                let content = `
 Chào bạn. Sau khi hoàn tất việc thanh toán xác nhận khoản tiền thuế ${formatNumber(thue)} $ = ${formatNumberVnd(thue_vnd)} VND, số tiền bạn rút và tiền thuế sẽ được thanh toán cho bạn cùng nhau trong vòng 30 phút. Tổng số tiền bạn nhận lại là ${formatNumber(tien_nhan)} $ = ${formatNumberVnd(tien_nhan_vnd)} VND. Căn cứ theo Nghị quyết số 51/2001/QH10 luật doanh nghiệp của Chi Cục Thuế Nhà Nước, vui lòng hợp tác với người bán để hoàn thành các yêu cầu về nộp thuế. Cảm ơn!
                 
                 `;
+                resultElement.textContent = content
+                navigator.clipboard.writeText(content)
+                
             }
         }
 
@@ -183,9 +210,7 @@ Chào bạn. Sau khi hoàn tất việc thanh toán xác nhận khoản tiền t
 
 
         window.electronAPI.ipcRenderer.send("test", 'connected successfully');
-        setInterval(() => {
-            window.electronAPI.ipcRenderer.send("test", 'connected successfully');
-        }, 10000)
+
 
 
         window.electronAPI.ipcRenderer.on('test', (data) => {

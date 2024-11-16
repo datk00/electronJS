@@ -1,4 +1,79 @@
+// Hàm để chuyển URL ảnh thành base64
+function getBase64Image(imgUrl, callback) {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imgUrl;
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        callback(dataURL);
+    };
+}
+
+// Hàm để lưu lựa chọn vào localStorage và cập nhật giao diện
+function selectBackground(background) {
+    const backgroundElement = document.querySelector(`.background-image.${background}`);
+    if (background === 'default') {
+        // Xóa hình nền nếu chọn mặc định
+        document.body.style.backgroundImage = '';
+        localStorage.removeItem('selectedBackground');
+    } else {
+        // Lấy base64 image và lưu vào localStorage
+        const bgUrl = window.getComputedStyle(backgroundElement).backgroundImage.slice(5, -2);
+        getBase64Image(bgUrl, (base64Image) => {
+            localStorage.setItem('selectedBackground', base64Image);
+            document.body.style.backgroundImage = `url(${base64Image})`;
+        });
+    }
+    
+    // Xóa tất cả các trạng thái active, rồi thêm cho lựa chọn hiện tại
+    document.querySelectorAll('.background-option').forEach(option => {
+        option.classList.remove('active');
+    });
+    backgroundElement.parentElement.classList.add('active');
+}
+
+// Hàm để tải hình nền từ localStorage khi trang mở lại
+function loadBackground() {
+    const savedBackground = localStorage.getItem('selectedBackground');
+    if (savedBackground) {
+        // Hiển thị hình nền đã lưu từ localStorage
+        document.body.style.backgroundImage = `url(${savedBackground})`;
+
+        // Tìm và đánh dấu lựa chọn hình nền đã chọn trước đó
+        document.querySelectorAll('.background-option').forEach(option => {
+            const optionImage = option.querySelector('.background-image');
+            const optionBgUrl = window.getComputedStyle(optionImage).backgroundImage.slice(5, -2);
+            getBase64Image(optionBgUrl, (base64Image) => {
+                if (base64Image === savedBackground) {
+                    option.classList.add('active');
+                }
+            });
+        });
+    } else {
+        // Hiển thị mặc định nếu không có hình nền nào được lưu
+        document.body.style.backgroundImage = '';
+        document.querySelector('.background-option .default').parentElement.classList.add('active');
+    }
+}
+
+// Gọi hàm loadBackground() khi trang được tải
+document.addEventListener('DOMContentLoaded', loadBackground);
+
+
+
+
 // Elements
+
+
+
+
+
+
 var name_user = document.querySelector('.__name')
 name_user.textContent = localStorage.getItem('userName')
 
@@ -181,19 +256,19 @@ function convert() {
             break;
         case '-5%':
             result = amount * 0.95 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 5% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 5% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '-10%':
             result = amount * 0.9 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 10% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 10% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '-15%':
             result = amount * 0.85 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 15% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 15% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
         case '-20%':
             result = amount * 0.8 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ${formatNumber(amount)} ${charM} - 20% * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 20% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
             break;
     }
 
