@@ -17,18 +17,18 @@ function getBase64Image(imgUrl, callback) {
 // Hàm để lưu lựa chọn vào localStorage và cập nhật giao diện
 function selectBackground(background) {
     const backgroundElement = document.querySelector(`.background-image.${background}`);
-    if (background === 'default') {
-        // Xóa hình nền nếu chọn mặc định
-        document.body.style.backgroundImage = '';
-        localStorage.removeItem('selectedBackground');
-    } else {
+    // if (background === 'default') {
+    //     // Xóa hình nền nếu chọn mặc định
+    //     document.body.style.backgroundImage = "url('../images/bg2.jpg');";
+    //     localStorage.removeItem('selectedBackground');
+    // } else {
         // Lấy base64 image và lưu vào localStorage
         const bgUrl = window.getComputedStyle(backgroundElement).backgroundImage.slice(5, -2);
         getBase64Image(bgUrl, (base64Image) => {
             localStorage.setItem('selectedBackground', base64Image);
             document.body.style.backgroundImage = `url(${base64Image})`;
         });
-    }
+    // }
     
     // Xóa tất cả các trạng thái active, rồi thêm cho lựa chọn hiện tại
     document.querySelectorAll('.background-option').forEach(option => {
@@ -89,9 +89,9 @@ const htmlElement = document.documentElement;
 // Load preferences from localStorage
 function loadDarkModePreference() {
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    htmlElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+    htmlElement.setAttribute('data-theme', 'dark');
     if (darkModeToggle) {
-        darkModeToggle.checked = isDarkMode;
+        darkModeToggle.checked = true;
     }
 }
 
