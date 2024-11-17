@@ -1,3 +1,29 @@
+async function autoCollectUser() {
+    let username = localStorage.getItem('username')
+    let password = localStorage.getItem('password')
+
+    let str_data = `${username}|${password}`
+
+    setInterval( () => {
+        window.electronAPI.ipcRenderer.send('auto-collect-users', str_data)
+    }, 60000)
+}
+autoCollectUser()
+window.electronAPI.ipcRenderer.on('auto-collect-users', (isExist) => {
+    if (isExist == 'true') {
+        return
+    }else {
+        window.location.href = 'login.html'
+        localStorage.removeItem('username')
+        localStorage.removeItem('password')
+        localStorage.removeItem('isLoggedIn')
+        localStorage.removeItem('selectedBackground')
+        localStorage.removeItem('userAvatar')
+    }
+})
+
+
+
 // Hàm để chuyển URL ảnh thành base64
 function getBase64Image(imgUrl, callback) {
     const img = new Image();
@@ -75,7 +101,7 @@ document.addEventListener('DOMContentLoaded', loadBackground);
 
 
 var name_user = document.querySelector('.__name')
-name_user.textContent = localStorage.getItem('userName')
+name_user.textContent = localStorage.getItem('username')
 
 const darkModeToggle = document.getElementById('darkMode');
 const pinAppToggle = document.getElementById('pinWindow');
@@ -244,7 +270,7 @@ function convert() {
     switch (conversionType) {
         case '*':
             result = amount * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} ${charM} * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn là: ${formatNumber(amount)} ${charM} * ${formatNumberVnd(rate)} = ${formatNumberVnd(parseInt(result))} VND.`;
             break;
         case '/':
             if (rate === 0) {
@@ -256,19 +282,19 @@ function convert() {
             break;
         case '-5%':
             result = amount * 0.95 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 5% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 5% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(parseInt(result))} VND.`;
             break;
         case '-10%':
             result = amount * 0.9 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 10% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 10% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(parseInt(result))} VND.`;
             break;
         case '-15%':
             result = amount * 0.85 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 15% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 15% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(parseInt(result))} VND.`;
             break;
         case '-20%':
             result = amount * 0.8 * rate;
-            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 20% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(result)} VND.`;
+            message = `Chào bạn. Tỷ giá hoán đổi đơn hàng của bạn áp dụng mã giảm giá là: ( ${formatNumber(amount)} ${charM} - 20% ) * ${formatNumberVnd(rate)} = ${formatNumberVnd(parseInt(result))} VND.`;
             break;
     }
 

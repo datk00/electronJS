@@ -1,6 +1,7 @@
 /* ... (các biến CSS root giữ nguyên) ... */
 :root[data-theme="light"] {
     --primary-color: #2563eb;
+    --primary-color: #ffffff;
     --secondary-color: #1e40af;
     --background-color: #f0f9ff;
     --card-background: #ffffff80;
@@ -17,6 +18,7 @@
 
 :root[data-theme="dark"] {
     --primary-color: #60a5fa;
+    --primary-color_text: #ffffff;
     --secondary-color: #3b82f6;
     --background-color: #111827;
     --card-background: #1f293776;
@@ -144,7 +146,7 @@ body {
 
 h1, h2 {
     text-align: center;
-    color: var(--primary-color);
+    color: var(--primary-color_text);
     margin-bottom: 1.5rem;
 }
 

@@ -10,5 +10,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
         },
         generateQR: (data) => ipcRenderer.invoke('generate-qr', data),
         downloadQR: (data) => ipcRenderer.invoke('download-qr', data),
+    },
+    send: (channel, data) => {
+        ipcRenderer.send(channel, data);
+    },
+    receive: (channel, func) => {
+        ipcRenderer.on(channel, (event, ...args) => func(...args));
     }
 });

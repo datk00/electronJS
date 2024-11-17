@@ -4,6 +4,8 @@ const getDataFromGgsheet = require('./src/getDataFromSheet.js');
 const { JsonDB, Config } = require('node-json-db');
 const db = new JsonDB(new Config("settings", true, false, '/'));
 const QRCode = require('qrcode')
+const { dialog } = require('electron')
+
 var DataFromSheet = null;
 let mainWindow;
 
@@ -23,7 +25,7 @@ async function createWindow() {
     });
 
     // Tải file HTML
-    mainWindow.loadFile('./src/templates/index.html');
+    mainWindow.loadFile('./src/templates/login.html');
 
     // Ẩn thanh menu mặc định
     Menu.setApplicationMenu(null);
@@ -61,8 +63,17 @@ ipcMain.on('test', async (event, value) => {
     }
 });
 
-ipcMain.on('valid-account', (event, data) => {
-    console.log(data.username);
+ipcMain.on('auto-collect-users', async (event, str_data) => {
+    DataFromSheet = await getDataFromGgsheet()
+    let users = DataFromSheet.dataInfoUsers
+    console.log(`str_data:  ${str_data}`)
+    let isExist = users.includes(str_data)
+    event.reply('auto-collect-users', `${isExist}`)
+})
+
+ipcMain.on('valid-account', async (event, data) => {
+    DataFromSheet = await getDataFromGgsheet()
+
     const str_data = `${data.username}|${data.password}`;
     const isStatus = DataFromSheet.dataInfoUsers.includes(str_data);
 

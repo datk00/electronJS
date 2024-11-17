@@ -45,7 +45,8 @@ window.electronAPI.ipcRenderer.on('test', (data) => {
     }else if (parseJSON.action == 'valid-account') {
         if (parseJSON.status) {
             localStorage.setItem('isLoggedIn', true);
-            localStorage.setItem('userName', __username);
+            localStorage.setItem('username', __username);
+            localStorage.setItem('password', __password);
             window.location.href = 'index.html';
             // document.getElementById('loginContainer').classList.add('hidden');
             // document.getElementById('mainContainer').classList.remove('hidden');
