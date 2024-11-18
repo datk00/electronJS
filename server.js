@@ -50,6 +50,35 @@ async function createWindow() {
 
     // Mở DevTools khi cửa sổ tạo ra
     // mainWindow.webContents.openDevTools();
+    // Lắng nghe sự kiện cập nhật
+    autoUpdater.on('update-available', (info) => {
+        console.log('Cập nhật có sẵn:', info);
+        // Gửi sự kiện cho renderer process
+        mainWindow.webContents.send('update-available', info);
+    });
+
+    autoUpdater.on('update-not-available', () => {
+        console.log('Không có bản cập nhật nào');
+        // Gửi sự kiện cho renderer process
+        mainWindow.webContents.send('update-not-available');
+    });
+
+    autoUpdater.on('error', (err) => {
+        console.error('Lỗi khi kiểm tra bản cập nhật:', err);
+        // Gửi sự kiện lỗi cho renderer process
+        mainWindow.webContents.send('update-error', err);
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+        console.log('Cập nhật đã tải xong:', info);
+        // Gửi sự kiện cho renderer process
+        mainWindow.webContents.send('update-downloaded', info);
+        // Tự động cài đặt bản cập nhật
+        autoUpdater.quitAndInstall();
+    });
+
+    // Kiểm tra bản cập nhật khi cửa sổ được tạo
+
     autoUpdater.checkForUpdatesAndNotify();
 }
 
@@ -134,24 +163,6 @@ app.whenReady().then(async () => {
     });
 
 
-    // Lắng nghe sự kiện cập nhật
-    autoUpdater.on('update-available', (info) => {
-        console.log('Cập nhật có sẵn:', info);
-    });
-
-    autoUpdater.on('update-not-available', () => {
-        console.log('Không có bản cập nhật nào');
-    });
-
-    autoUpdater.on('error', (err) => {
-        console.error('Lỗi khi kiểm tra bản cập nhật:', err);
-    });
-
-    autoUpdater.on('update-downloaded', (info) => {
-        console.log('Cập nhật đã tải xong:', info);
-        // Tự động cài đặt bản cập nhật
-        autoUpdater.quitAndInstall();
-    });
 
 });
 

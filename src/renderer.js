@@ -60,6 +60,34 @@ window.electronAPI.ipcRenderer.on('test', (data) => {
 })
 
 
+window.electronAPI.ipcRenderer.on('update-available', (event, info) => {
+    console.log('Cập nhật có sẵn:', info);
+    // Hiển thị thông báo cập nhật cho người dùng, có thể tạo thông báo popup hoặc cập nhật UI
+    alert('Có bản cập nhật mới!');
+});
+
+// Lắng nghe sự kiện 'update-not-available' từ Main Process
+window.electronAPI.ipcRenderer.on('update-not-available', () => {
+    console.log('Không có bản cập nhật nào');
+    // Thông báo cho người dùng rằng không có bản cập nhật
+    alert('Không có bản cập nhật nào');
+});
+
+// Lắng nghe sự kiện lỗi 'update-error' từ Main Process
+window.electronAPI.ipcRenderer.on('update-error', (event, err) => {
+    console.error('Lỗi khi kiểm tra bản cập nhật:', err);
+    // Thông báo lỗi cho người dùng
+    alert('Đã có lỗi khi kiểm tra bản cập nhật');
+});
+
+// Lắng nghe sự kiện 'update-downloaded' từ Main Process
+window.electronAPI.ipcRenderer.on('update-downloaded', (event, info) => {
+    console.log('Cập nhật đã tải xong:', info);
+    // Thông báo cho người dùng rằng bản cập nhật đã sẵn sàng để cài đặt
+    alert('Bản cập nhật đã tải xong!');
+});
+
+
 
 window.electronAPI.ipcRenderer.on('get-propety-setting', (data) => {
 
