@@ -7,11 +7,19 @@
     "start": "electron .",
     "dist": "electron-builder"
   },
+
+  "repository": "https://github.com/datk00/electronJS",
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "electron-updater": "^6.3.9",
     "google-auth-library": "^9.14.2",
     "google-spreadsheet": "^4.1.4",
     "node-json-db": "^2.3.0",

@@ -4,7 +4,10 @@ const getDataFromGgsheet = require('./src/getDataFromSheet.js');
 const { JsonDB, Config } = require('node-json-db');
 const db = new JsonDB(new Config("settings", true, false, '/'));
 const QRCode = require('qrcode')
-const { dialog } = require('electron')
+const { autoUpdater, AppUpdater } = require('electron-updater');
+
+// autoUpdater.autoDownload = false
+// autoUpdater.autoInstallOnAppQuit =
 
 var DataFromSheet = null;
 let mainWindow;
@@ -46,7 +49,8 @@ async function createWindow() {
     });
 
     // Mở DevTools khi cửa sổ tạo ra
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
+    autoUpdater.checkForUpdatesAndNotify();
 }
 
 // Lắng nghe sự kiện IPC từ renderer process
@@ -128,6 +132,27 @@ app.whenReady().then(async () => {
             createWindow();
         }
     });
+
+
+    // Lắng nghe sự kiện cập nhật
+    autoUpdater.on('update-available', (info) => {
+        console.log('Cập nhật có sẵn:', info);
+    });
+
+    autoUpdater.on('update-not-available', () => {
+        console.log('Không có bản cập nhật nào');
+    });
+
+    autoUpdater.on('error', (err) => {
+        console.error('Lỗi khi kiểm tra bản cập nhật:', err);
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+        console.log('Cập nhật đã tải xong:', info);
+        // Tự động cài đặt bản cập nhật
+        autoUpdater.quitAndInstall();
+    });
+
 });
 
 

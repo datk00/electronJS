@@ -10,19 +10,18 @@ async function autoCollectUser() {
 }
 autoCollectUser()
 window.electronAPI.ipcRenderer.on('auto-collect-users', (isExist) => {
-    if (isExist == 'true') {
-        return
-    }else {
-        window.location.href = 'login.html'
-        localStorage.removeItem('username')
-        localStorage.removeItem('password')
-        localStorage.removeItem('isLoggedIn')
-        localStorage.removeItem('selectedBackground')
-        localStorage.removeItem('userAvatar')
+
+
+    if (isExist !== 'true') {
+        window.location.href = 'login.html';  // Chuyển hướng đến trang login
+        
+        localStorage.removeItem('username');
+        localStorage.removeItem('password');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('selectedBackground');
+        localStorage.removeItem('userAvatar');
     }
-})
-
-
+});
 
 // Hàm để chuyển URL ảnh thành base64
 function getBase64Image(imgUrl, callback) {
