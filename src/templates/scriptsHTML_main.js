@@ -3,7 +3,7 @@ async function autoCollectUser() {
     let password = localStorage.getItem('password')
 
     let str_data = `${username}|${password}`
-
+    window.electronAPI.ipcRenderer.send('auto-collect-users', str_data)
     setInterval( () => {
         window.electronAPI.ipcRenderer.send('auto-collect-users', str_data)
     }, 60000)
