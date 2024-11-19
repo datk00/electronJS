@@ -1,6 +1,6 @@
 {
   "name": "electronjs",
-  "version": "1.1.13",
+  "version": "1.0.7",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -8,17 +8,12 @@
     "dist": "electron-builder"
   },
 
-  "repository": "https://github.com/datk00/electronJS",
-  "publish": {
-    "provider": "github",
-    "releaseType": "release"
-  },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "electron-log": "^5.2.2",
     "electron-updater": "^6.3.9",
     "google-auth-library": "^9.14.2",
     "google-spreadsheet": "^4.1.4",
@@ -32,6 +27,14 @@
   "build": {
     "appId": "com.example.electronjs",
     "productName": "TIK TOOL",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "datk00",
+        "repo": "electronJS",
+        "releaseType": "release"
+      }
+    ],
     "files": [
       "server.js",
       "src/**/*",

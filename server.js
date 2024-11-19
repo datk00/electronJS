@@ -6,8 +6,14 @@ const db = new JsonDB(new Config("settings", true, false, '/'));
 const QRCode = require('qrcode')
 const { autoUpdater, AppUpdater } = require('electron-updater');
 
-// autoUpdater.autoDownload = false
-// autoUpdater.autoInstallOnAppQuit =
+const log = require('electron-log');
+
+// Ghi log cho autoUpdater
+log.transports.file.level = 'info';
+autoUpdater.logger = log;
+
+autoUpdater.autoDownload = true; 
+autoUpdater.autoInstallOnAppQuit = true;
 
 var DataFromSheet = null;
 let mainWindow;
@@ -49,36 +55,32 @@ async function createWindow() {
     });
 
     // Mở DevTools khi cửa sổ tạo ra
-    mainWindow.webContents.openDevTools();
-    // Lắng nghe sự kiện cập nhật
-    autoUpdater.on('update-available', (info) => {
-        console.log('Cập nhật có sẵn:', info);
-        // Gửi sự kiện cho renderer process
-        mainWindow.webContents.send('update-available', info);
+    // mainWindow.webContents.openDevTools();
+
+    // Lắng nghe các sự kiện của autoUpdater
+    autoUpdater.on('checking-for-update', () => {
+        log.info('Đang kiểm tra cập nhật...');
     });
 
-    autoUpdater.on('update-not-available', () => {
-        console.log('Không có bản cập nhật nào');
-        // Gửi sự kiện cho renderer process
-        mainWindow.webContents.send('update-not-available');
+    autoUpdater.on('update-available', (info) => {
+        log.info('Cập nhật có sẵn:', info);
+    });
+
+    autoUpdater.on('update-not-available', (info) => {
+        log.info('Không có cập nhật mới:', info);
     });
 
     autoUpdater.on('error', (err) => {
-        console.error('Lỗi khi kiểm tra bản cập nhật:', err);
-        // Gửi sự kiện lỗi cho renderer process
-        mainWindow.webContents.send('update-error', err);
+        log.error('Lỗi trong quá trình cập nhật:', err);
     });
 
     autoUpdater.on('update-downloaded', (info) => {
-        console.log('Cập nhật đã tải xong:', info);
-        // Gửi sự kiện cho renderer process
-        mainWindow.webContents.send('update-downloaded', info);
-        // Tự động cài đặt bản cập nhật
+        log.info('Cập nhật đã tải xong:', info);
+        // Tự động cài đặt
         autoUpdater.quitAndInstall();
     });
 
-    // Kiểm tra bản cập nhật khi cửa sổ được tạo
-
+    // Bắt đầu kiểm tra cập nhật
     autoUpdater.checkForUpdatesAndNotify();
 }
 
