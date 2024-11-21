@@ -172,6 +172,9 @@ input, select {
     color: var(--text-color);
     transition: all 0.3s ease;
 }
+select option {
+    background-color: gray;
+}
 
 input:focus, select:focus {
     outline: none;
