@@ -31,8 +31,7 @@
       {
         "provider": "github",
         "owner": "datk00",
-        "repo": "electronJS",
-        "releaseType": "release"
+        "repo": "electronJS"
       }
     ],
     "files": [

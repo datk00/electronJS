@@ -8,15 +8,29 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 
 const log = require('electron-log');
 
-// Ghi log cho autoUpdater
-log.transports.file.level = 'info';
-autoUpdater.logger = log;
-
-autoUpdater.autoDownload = true; 
-autoUpdater.autoInstallOnAppQuit = true;
+log.transports.file.resolvePath = () => path.join('D:/Desktop/code_tool_teleelectronJS/src', '/logs/main.log');
+log.info('Hello, log');
+log.warn('Some problem appears');
 
 var DataFromSheet = null;
 let mainWindow;
+
+
+autoUpdater.on("update-available",()=>{
+    log.info("update-available")
+ })
+
+autoUpdater.on("checking-for-update",()=>{
+    log.info("checking-for-update")
+})
+
+autoUpdater.on("download-progress",()=>{
+    log.info("download-progress")
+})
+autoUpdater.on("update-downloaded",()=>{
+    log.info("update-downloaded")
+})
+
 
 async function createWindow() {
     // Lấy dữ liệu RATE trước khi tạo cửa sổ
@@ -57,31 +71,7 @@ async function createWindow() {
     // Mở DevTools khi cửa sổ tạo ra
     // mainWindow.webContents.openDevTools();
 
-    // Lắng nghe các sự kiện của autoUpdater
-    autoUpdater.on('checking-for-update', () => {
-        log.info('Đang kiểm tra cập nhật...');
-    });
 
-    autoUpdater.on('update-available', (info) => {
-        log.info('Cập nhật có sẵn:', info);
-    });
-
-    autoUpdater.on('update-not-available', (info) => {
-        log.info('Không có cập nhật mới:', info);
-    });
-
-    autoUpdater.on('error', (err) => {
-        log.error('Lỗi trong quá trình cập nhật:', err);
-    });
-
-    autoUpdater.on('update-downloaded', (info) => {
-        log.info('Cập nhật đã tải xong:', info);
-        // Tự động cài đặt
-        autoUpdater.quitAndInstall();
-    });
-
-    // Bắt đầu kiểm tra cập nhật
-    autoUpdater.checkForUpdatesAndNotify();
 }
 
 // Lắng nghe sự kiện IPC từ renderer process
@@ -146,6 +136,7 @@ ipcMain.on('get-initial-state', (event) => {
 // Khi Electron đã sẵn sàng
 app.whenReady().then(async () => {
     await createWindow();
+    autoUpdater.checkForUpdatesAndNotify()
 
     // Kiểm tra và thiết lập autostart
     try {
