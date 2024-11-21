@@ -8,40 +8,47 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 const fs = require('fs');
 
 
-const log = require('electron-log');
+// const log = require('electron-log');
 
-const pathToLogFile = path.join('D:/Desktop/code_tool_tele/electronJS/src', 'logs', 'main.log');
+// const pathToLogFile = path.join('D:/Desktop/code_tool_tele/electronJS/src', 'logs', 'main.log');
 
-log.transports.file.resolvePathFn = () => pathToLogFile;
+// log.transports.file.resolvePathFn = () => pathToLogFile;
 
-log.info("APP version: " + app.getVersion())
+// log.info("APP version: " + app.getVersion())
 
 var DataFromSheet = null;
 let mainWindow;
 
 
 
-autoUpdater.on("checking-for-update",()=>{
-    log.info("checking for update...")
-})
-autoUpdater.on("update-available",(info)=>{
-    log.info("update-available")
- })
+autoUpdater.on("checking-for-update", () => {
+    mainWindow.webContents.send('checking-update');
+});
 
-autoUpdater.on("update-not-available",(info)=>{
-    log.info("update-not-available")
- })
-autoUpdater.on("error",(err)=>{
-    log.info("update-error: "+ err)
- })
-autoUpdater.on("download-progress",(progressTrack)=>{
+autoUpdater.on("update-available", (info) => {
+    mainWindow.webContents.send('update-available', info);
+});
 
-    log.info("download-progress")
-    log.info(progressTrack)
-})
-autoUpdater.on("update-downloaded",()=>{
-    log.info("update-downloaded")
-})
+autoUpdater.on("update-not-available", (info) => {
+    mainWindow.webContents.send('update-not-available', info);
+});
+
+autoUpdater.on("error", (err) => {
+    mainWindow.webContents.send('update-error', err);
+});
+
+autoUpdater.on("download-progress", (progressTrack) => {
+    mainWindow.webContents.send('update-progress', progressTrack);
+});
+
+autoUpdater.on("update-downloaded", () => {
+    mainWindow.webContents.send('update-downloaded');
+});
+
+// Restart app handler
+ipcMain.on('restart-app', () => {
+    autoUpdater.quitAndInstall();
+});
 
 
 async function createWindow() {
@@ -81,7 +88,7 @@ async function createWindow() {
     });
 
     // Mở DevTools khi cửa sổ tạo ra
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
 
 }

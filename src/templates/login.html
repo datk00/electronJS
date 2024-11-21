@@ -47,8 +47,8 @@
         }
 
         body {
-            /* background-color: var(--background-color); */
-            background-color: red;
+            background-color: var(--background-color);
+            /* background-color: red; */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -211,6 +211,58 @@
                 align-items: flex-start;
             }
         }
+
+
+
+
+        .update-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-background);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        .update-notification.hidden {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--border-color);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .restart-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .restart-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .restart-btn.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -219,6 +271,16 @@
         <div class="modal-content">
             <p id="modalMessage"></p>
             <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+    <div id="updateNotification" class="update-notification hidden">
+        <div class="update-content">
+            <h3>Đang cập nhật ứng dụng</h3>
+            <div class="progress-bar">
+                <div id="progressBar" class="progress"></div>
+            </div>
+            <p id="progressText">0%</p>
+            <button id="restartButton" class="restart-btn hidden">Khởi động lại</button>
         </div>
     </div>
     <div class="container" id="loginContainer">
@@ -261,6 +323,28 @@
             console.log(`${usernameInput} ${passwordInput}`);
             window.electronAPI.ipcRenderer.send('valid-account', {username: usernameInput.value, password: passwordInput.value})
         }
+    </script>
+    <script>
+
+        // Update notification handling
+        window.electronAPI.onUpdateAvailable(() => {
+            document.getElementById('updateNotification').classList.remove('hidden');
+        });
+
+        window.electronAPI.onUpdateProgress((event, progressTrack) => {
+            const percent = Math.round(progressTrack.percent);
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            document.getElementById('progressText').textContent = `${percent}%`;
+        });
+
+        window.electronAPI.onUpdateDownloaded(() => {
+            document.getElementById('progressText').textContent = 'Cập nhật hoàn tất!';
+            document.getElementById('restartButton').classList.remove('hidden');
+        });
+
+        document.getElementById('restartButton').addEventListener('click', () => {
+            window.electronAPI.restartApp();
+        });
     </script>
     <script src="../renderer.js"></script>
     <!-- <script src="./scriptsHTML_main.js"></script> -->
