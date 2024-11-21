@@ -53,7 +53,7 @@ window.electronAPI.ipcRenderer.on('test', (data) => {
             // initTheme(); 
         } else {
             localStorage.setItem('isLoggedIn', false);
-            showModal('Thông tin đăng nhập không chính xác')
+            showModal('Thông tin đăng nhập không chính xác hoặc tải khoản hết hạn.')
         }
     }
 
