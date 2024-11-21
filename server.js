@@ -81,7 +81,7 @@ async function createWindow() {
     });
 
     // Mở DevTools khi cửa sổ tạo ra
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
 
 }
