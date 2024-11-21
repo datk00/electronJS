@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIK TOOL - Quy Đổi Tiền Tệ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css/css/flag-icon.min.css">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .rate-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.flag-selector {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.selected-flag .flag-icon {
+    width: 25px;
+    height: 18px;
+    display: inline-block;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.flag-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: var(--shadow);
+    z-index: 100;
+}
+
+.flag-selector:hover .flag-dropdown {
+    display: flex;
+}
+
+.flag-dropdown .flag-icon {
+    width: 25px;
+    height: 18px;
+    display: block;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.flag-dropdown .flag-icon:hover {
+    transform: scale(1.1);
+}
+
+.input-group input {
+    padding-right: 45px !important;
+}
+
+.flag-icon {
+    opacity: 0.7;
+    border: 1px solid var(--border-color);
+}
+
+.flag-icon:hover, .flag-icon.active {
+    opacity: 1;
+}
+.notes {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+.notes h3 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.notes ul {
+    list-style-type: none;
+    padding-left: 1rem;
+}
+
+.notes li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+}
+
+.notes li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="" class="logout">
+            <i class="fas fa-right-from-bracket"></i>
+        </a>
+        <p class="__name">Thành Đạt</p>
+        <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link active"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
+        <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="contact.html" class="sidebar-link"><i class="fas fa-address-book"></i>Liên hệ</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <!-- <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label> -->
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg5" onchange="selectBackground('bg5')" />
+                <span class="background-image bg5"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg6" onchange="selectBackground('bg6')" />
+                <span class="background-image bg6"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg7" onchange="selectBackground('bg7')" />
+                <span class="background-image bg7"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg8" onchange="selectBackground('bg8')" />
+                <span class="background-image bg8"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg9" onchange="selectBackground('bg9')" />
+                <span class="background-image bg9"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg10" onchange="selectBackground('bg10')" />
+                <span class="background-image bg10"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Modal tùy chỉnh -->
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+
+
+    <div class="container " id="mainContainer">
+        <h1>Quy Đổi Tiền Tệ</h1>
+        <div class="card">
+            <div class="left-side">
+                <div class="input-group">
+                    <label>Số tiền ($, ¥, ៛)</label>
+                    <input type="text" id="amount" placeholder="Nhập số tiền..." autofocus>
+                </div>
+                
+                <div class="input-group">
+                    <label>Tỷ giá</label>
+                    <div class="rate-input-container">
+                        <input type="number" id="rate" rate-type="USD" placeholder="Nhập tỷ giá...">
+                        <div class="flag-selector">
+                            <div class="selected-flag">
+                                <span class="flag-icon flag-icon-us active" data-rate="24150" data-currency="USD"></span>
+                            </div>
+                            <div class="flag-dropdown">
+                                <span class="flag-icon flag-icon-us rate-us" data-rate="25000" data-currency="USD"></span>
+                                <span class="flag-icon flag-icon-cn rate-cn" data-rate="3507" data-currency="CNY"></span>
+                                <span class="flag-icon flag-icon-kh rate-cam" data-rate="5.70" data-currency="KHR"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Kiểu quy đổi</label>
+                    <select id="conversionType">
+                        <option value="*">Nhân (*)</option>
+                        <option value="/">Chia (/)</option>
+                        <option value="-5%">Giảm 5%</option>
+                        <option value="-10%">Giảm 10%</option>
+                        <option value="-15%">Giảm 15%</option>
+                        <option value="-20%">Giảm 20%</option>
+                    </select>
+                </div>
+    
+                <div class="button-group">
+                    <button onclick="convert()" class="primary">Quy Đổi</button>
+                    <button onclick="reset()" class="secondary">Xóa Sạch</button>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="result" id="result"></div>
+                <div class="notes">
+                    <h3>Ghi chú:</h3>
+                    <ul>
+                        <li>😀Nhập số tiền bạn muốn chuyển đổi: Gõ vào ô "Số tiền" số tiền bạn cần quy đổi từ tiền tệ nguồn (ví dụ: USD, CNY, KHR) sang VND.</li>
+                        <li>Tỷ giá tự động cập nhật: Tỷ giá quy đổi sẽ được cập nhật tự động theo thời gian thực. Mỗi lần bạn sử dụng công cụ, tỷ giá sẽ được lấy từ nguồn tin cậy và có thể thay đổi tùy theo thị trường.
+                            Chọn loại tiền tệ quy đổi: Tại ô "Kiểu quy đổi", bạn có thể chọn các loại tiền tệ để quy đổi như CNY
+                            , USD
+                            , KHR
+                            , và nhiều loại tiền tệ khác.</li>
+                        <li>Bấm 'Quy Đổi' hoặc nhấn 'Enter': Sau khi nhập số tiền và chọn loại tiền tệ quy đổi, bạn có thể nhấn nút 'Quy Đổi' hoặc nhấn phím 'Enter' trên bàn phím để thực hiện quy đổi. Kết quả sẽ được hiển thị ngay lập tức và tự động sao chép vào bộ nhớ để bạn dễ dàng dán (paste) ở nơi khác.</li>
+                        <li>CTRL X: xóa nhanh</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+    <script src="checkLogin.js"></script>
+    <script src="scriptsHTML_main.js"></script>
+    <script type="module" src="../renderer.js"></script>
+    <script>
+        // Thêm vào phần script hiện có
+        document.addEventListener('DOMContentLoaded', function() {
+            const flagSelector = document.querySelector('.flag-selector');
+            const rateInput = document.getElementById('rate');
+            const selectedFlag = document.querySelector('.selected-flag');
+            const flags = document.querySelectorAll('.flag-dropdown .flag-icon');
+        
+            flags.forEach(flag => {
+                flag.addEventListener('click', function() {
+                    // Cập nhật giao diện
+                    const currentSelected = document.querySelector('.selected-flag .flag-icon');
+                    currentSelected.className = this.className;
+                    currentSelected.dataset.rate = this.dataset.rate;
+                    currentSelected.dataset.currency = this.dataset.currency;
+        
+                    // Cập nhật giá trị input
+                    rateInput.setAttribute('rate-type', currentSelected.getAttribute('data-currency'))
+                    rateInput.value = this.dataset.rate;
+                });
+            });
+        });
+        </script>
+        <script>
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    // Ngăn chặn hành động mặc định (ví dụ như submit form)
+                    e.preventDefault();
+
+                    // Lấy giá trị từ các trường nhập liệu
+                    const amountValue = document.getElementById('amount').value;
+                    const conversionTypeValue = document.getElementById('conversionType').value;
+
+                    // Kiểm tra nếu giá trị nhập liệu hợp lệ
+                    if (amountValue !== '' && conversionTypeValue !== '') {
+                        // Thực hiện convert
+                        convert();
+                        
+                        // Giả sử message là kết quả từ convert() và muốn copy vào clipboard
+                        navigator.clipboard.writeText(message)
+                            .then(() => {
+                                console.log("Đã sao chép kết quả vào clipboard");
+                            })
+                            .catch(err => {
+                                console.error("Lỗi khi sao chép vào clipboard: ", err);
+                            });
+                    } else {
+                        console.log("Vui lòng nhập đủ thông tin.");
+                    }
+
+                    if (document.getElementById('loginContainer').classList.contains('hidden')) {
+                        convert(); // Gọi convert nếu modal đã được ẩn
+                    } else {
+                        login(); // Nếu chưa ẩn, yêu cầu đăng nhập
+                    }
+                }
+                if (e.ctrlKey && e.key === 'x') {
+                    reset()
+                }
+            });
+        </script>
+
+<script>
+    document.getElementById('amount').addEventListener('input', function(event) {
+        let inputValue = event.target.value;
+        
+        let [integerPart, decimalPart] = inputValue.split('.');
+
+        integerPart = integerPart.replace(/[^0-9]/g, ''); // Loại bỏ các ký tự không phải là số
+        integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Thêm dấu phẩy phân cách hàng nghìn
+
+        if (decimalPart !== undefined) {
+            decimalPart = decimalPart.replace(/[^0-9]/g, ''); // Loại bỏ các ký tự không phải là số trong phần thập phân
+            inputValue = `${integerPart}.${decimalPart}`;
+        } else {
+            inputValue = integerPart;
+        }
+
+        event.target.value = inputValue;
+    });
+
+</script>
+</body>
+</html>

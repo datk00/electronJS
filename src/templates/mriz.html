@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIK TOOL - Tạo mã MRZ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <a href="" class="logout">
+            <i class="fas fa-right-from-bracket"></i>
+        </a>
+        <p class="__name">Thành Đạt</p>
+        <a href="index.html" class="sidebar-link "><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link active"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
+        <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="contact.html" class="sidebar-link"><i class="fas fa-address-book"></i>Liên hệ</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <!-- <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label> -->
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg5" onchange="selectBackground('bg5')" />
+                <span class="background-image bg5"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg6" onchange="selectBackground('bg6')" />
+                <span class="background-image bg6"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg7" onchange="selectBackground('bg7')" />
+                <span class="background-image bg7"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg8" onchange="selectBackground('bg8')" />
+                <span class="background-image bg8"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg9" onchange="selectBackground('bg9')" />
+                <span class="background-image bg9"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg10" onchange="selectBackground('bg10')" />
+                <span class="background-image bg10"></span>
+            </label>
+        </div>
+    </div>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <!-- Modal tùy chỉnh -->
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <h1>MRZ Calculator</h1>
+        <div class="card">
+            <div class="row">
+                <div class="flex2-1">
+                    <div class="form-grid">
+                        <div class="row flex1-1-for-child">
+                            <div class="input-group">
+                                <label for="mrzType">Loại MRZ</label>
+                                <select id="mrzType">
+                                    <option value="TD3">Hộ chiếu (TD3)</option>
+                                    <option value="TD1">CCCD (TD1)</option>
+                                    <option value="TD2">CCCD (TD2)</option>
+                                    <!-- <option value="MRVA">Visa (A)</option> -->
+                                    <!-- <option value="MRVB">Visa (B)</option> -->
+                                </select>
+                            </div>
+            
+                            <div class="input-group">
+                                <label for="documentType">Loại Tài Liệu</label>
+                                <input type="text" id="documentType" placeholder="P" value="P" readonly>
+                            </div>
+                            <div class="input-group">
+                                <label for="issuingCountry">Quốc Gia</label>
+                                <input type="text" id="issuingCountry" placeholder="BGR" >
+                            </div>
+                        </div>
+                        
+                        <div class="row flex1-1-for-child">
+                            <div class="input-group">
+                                <label for="documentNumber">Số định danh</label>
+                                <input type="text" id="documentNumber" placeholder="U9KJKVKXS">
+                            </div>
+                            <div class="input-group">
+                                <label for="birthDate">Ngày sinh</label>
+                                <input type="text" id="birthDate" placeholder=" (năm/tháng/ngày), ví dụ 241204 " >
+                            </div>
+            
+                            <div class="input-group">
+                                <label for="sex">Giới tính</label>
+                                <input type="text" id="sex" placeholder="M: Nam, F: Nữ" list="gfd">
+                                <datalist id="gfd">
+                                    <option value="M">Nam</option>
+                                    <option value="F">Nữ</option>
+                                </datalist>
+                            </div>
+                        </div>
+                        <div class="row flex1-1-for-child">
+                            <div class="input-group">
+                                <label for="expiryDate">Ngày hết hạn</label>
+                                <input type="text" id="expiryDate" placeholder="(năm/tháng/ngày), ví dụ 241204" >
+                            </div>
+                            <div class="input-group">
+                                <label for="nationality">Quốc tịch</label>
+                                <input type="text" id="nationality" placeholder="BGR" >
+                            </div>
+                            <div class="input-group">
+                                <label for="surname">Họ</label>
+                                <input type="text" id="surname" placeholder="Nguyen" >
+                            </div>
+                        </div>
+                        <div class="row flex1-1-for-child">
+                            <div class="input-group">
+                                <label for="givenNames">Tên và đệm</label>
+                                <input type="text" id="givenNames" placeholder="Ann" >
+                            </div>
+                            <div class="input-group">
+                                <label for="optiona1">Số CCCD</label>
+                                <input type="text" id="optional1" placeholder="..." >
+                            </div>
+                            <div class="input-group">
+                                <label for="optional2">Mã thế hệ</label>
+                                <input type="text" id="optional2" placeholder="..." >
+                            </div>
+                        </div>
+                    
+                    </div>
+        
+                    <div class="button-group">
+                        <button class="primary" onclick="random_riz()">TẠO NGẪU NHIÊN</button>
+                        <button class="primary" onclick="create_riz()">TẠO NGAY</button>
+                    </div>
+                </div>
+    
+                <div class="result height-min-content" id="result">
+                    <!-- MRZ result will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const mrzTypeSelect = document.getElementById('mrzType');
+
+        // Thêm sự kiện 'change'
+        mrzTypeSelect.addEventListener('change', function() {
+            // Lấy giá trị của option được chọn
+            let docType = document.querySelector("#documentType")
+
+            const selectedValue = mrzTypeSelect.value;
+            if (selectedValue == "TD1" || selectedValue == "TD2") {
+                docType.value = "I"
+            }else if (selectedValue == "TD3" ) {
+                docType.value = "P"
+            }else if (selectedValue == "MRVA" || selectedValue == "MRVB") {
+                docType.value = "V"
+            }
+        });
+    </script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+    <script>
+        function generateRandom() {
+            // Implementation for random MRZ generation
+            document.getElementById('result').textContent = 'Random MRZ will be generated here';
+        }
+
+        function generate() {
+            // Implementation for MRZ generation based on input values
+            document.getElementById('result').textContent = 'Generated MRZ will appear here';
+        }
+    </script>
+ 
+    <script>
+        async function random_riz() {
+            const __surname = document.querySelector('#surname')
+            const __givenName = document.querySelector('#givenNames')
+            const __nationality = document.querySelector('#nationality')
+            const __sex = document.querySelector('#sex')
+            const __document_number = document.querySelector('#documentNumber')
+            const __birthDate = document.querySelector('#birthDate')
+            const __expiry_date = document.querySelector('#expiryDate')
+            const __result = document.querySelector('.result')
+            const __country = document.querySelector('#issuingCountry')
+
+            const mrz_type = document.querySelector('#mrzType').value
+            const url = "https://www.dynamsoft.com/api-common/api/marketing/generateMRZ";
+            
+            const headers = {
+                "accept": "application/json",
+                "accept-language": "en,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,vi;q=0.6",
+                "content-type": "application/json",
+                "origin": "https://www.dynamsoft.com",
+                "priority": "u=1, i",
+                "referer": "https://www.dynamsoft.com/tools/mrz-generator/",
+                "sec-ch-ua": `"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"`,
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": `"Windows"`,
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+                "x-requested-with": "XMLHttpRequest"
+            };
+
+            const data = {
+                random: true,
+                DocumentType: mrz_type
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    let result = await response.json();
+                    result = JSON.parse(result.data)
+                    
+                    if (result.success) {
+                        __surname.value = result.surname
+                        __givenName.value = result.given_names
+                        __nationality.value = result.nationality
+                        __sex.value = result.sex
+                        __document_number.value = result.document_number
+                        __birthDate.value = result.birth_date
+                        __expiry_date.value = result.expiry_date
+                        __country.value = result.nationality
+                        console.log(result)
+                        __result.textContent = result.MRZ
+                        navigator.clipboard.writeText(__result.textContent);
+                    }
+                } else {
+                    showModal(`API lỗi, mã code ${response.status}`)
+                    console.error(await response.text());
+                }
+            } catch (error) {
+                console.error("Error occurred while fetching:", error);
+            }
+        }
+        async function create_riz() {
+            // Lấy dữ liệu từ các trường đầu vào trên giao diện (nếu có)
+            const __docType = document.querySelector('#mrzType').value
+            const __surname = document.querySelector('#surname').value 
+            const __givenName = document.querySelector('#givenNames').value 
+            const __nationality = document.querySelector('#nationality').value
+            const __sex = document.querySelector('#sex').value 
+            const __document_number = document.querySelector('#documentNumber').value
+            const __birthDate = document.querySelector('#birthDate').value 
+            const __expiry_date = document.querySelector('#expiryDate').value
+            const __optional1 =  document.querySelector('#optional1').value == "..." ? " " : document.querySelector('#optional1').value 
+            const __optional2 = document.querySelector('#optional2').value == "..." ? " " : document.querySelector('#optional2').value
+            const __country = document.querySelector('#issuingCountry').value
+
+            console.log("Document Type:", __docType);
+            console.log("Surname:", __surname);
+            console.log("Given Name:", __givenName);
+            console.log("Nationality:", __nationality);
+            console.log("Sex:", __sex);
+            console.log("Document Number:", __document_number);
+            console.log("Birth Date:", __birthDate);
+            console.log("Expiry Date:", __expiry_date);
+            console.log("Optional1:", __optional1);
+            console.log("Optional2:", __optional2);
+            console.log("Country:", __country);
+            const __result = document.querySelector('.result');
+
+            if (
+                __docType === "" ||
+                __surname === "" ||
+                __givenName === "" ||
+                __nationality === "" ||
+                __sex === "" ||
+                __document_number === "" ||
+                __birthDate === "" ||
+                __expiry_date === ""
+            ) {
+                return showModal('Dữ liệu chưa được nhập')
+            }
+
+            const url = "https://www.dynamsoft.com/api-common/api/marketing/generateMRZ";
+            
+            const headers = {
+                "accept": "application/json",
+                "accept-language": "en,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,vi;q=0.6",
+                "content-type": "application/json",
+                "origin": "https://www.dynamsoft.com",
+                "priority": "u=1, i",
+                "referer": "https://www.dynamsoft.com/tools/mrz-generator/",
+                "sec-ch-ua": '"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": '"Windows"',
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+                "x-requested-with": "XMLHttpRequest"
+                };
+                // const data = {
+                //     "DocumentType": "TD3",
+                //     "Birthday": "630120",
+                //     "Nationality": "ROU",
+                //     "Country": "ROU",
+                //     "Sex": "F",
+                //     "Surname": "Smith",
+                //     "DocumentNumber": "HTTNSHCHC",
+                //     "ExpiryDate": "301224",
+                //     "GivenName": "George",
+                //     "Optional1": "",
+                //     "Optional2": ""
+                //     };
+            const data = {
+                "DocumentType": __docType,
+                "Birthday": __birthDate,
+                "Nationality": __nationality,
+                "Country": __country,
+                "Sex": __sex,
+                "Surname": __surname,
+                "DocumentNumber": __document_number,
+                "ExpiryDate": __expiry_date,
+                "GivenName": __givenName,
+                "Optional1": __optional1,
+                "Optional2": __optional2
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',  // HTTP method
+                    headers: headers,
+                    body: JSON.stringify(data),  // Dữ liệu gửi đi (chuyển thành chuỗi JSON)
+                });
+
+                if (response.ok) {  // Kiểm tra xem trạng thái HTTP có thành công không
+                    const responseData = await response.json();  // Parse JSON từ response
+                    const result = JSON.parse(responseData.data)
+                    __result.textContent = result.MRZ
+                    navigator.clipboard.writeText(__result.textContent);
+                } else {
+                    showModal('Lỗi API')
+                }
+            } catch (error) {
+                console.error("Error:", error.message);  // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu
+            }
+        };
+    </script>
+
+    <script src="../renderer.js"></script>
+    <script src="./scriptsHTML_main.js"></script>
+</body>
+</html>

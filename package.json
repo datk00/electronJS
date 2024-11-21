@@ -1,0 +1,51 @@
+{
+  "name": "electronjs",
+  "version": "1.0.8",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "electron-log": "^5.2.2",
+    "electron-updater": "^6.3.9",
+    "google-auth-library": "^9.14.2",
+    "google-spreadsheet": "^4.1.4",
+    "node-json-db": "^2.3.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.example.electronjs",
+    "productName": "TIK TOOL",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "datk00",
+        "repo": "electronJS"
+      }
+    ],
+    "files": [
+      "server.js",
+      "src/**/*",
+      "icon.ico",
+      "settings.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

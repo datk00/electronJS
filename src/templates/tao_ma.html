@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIK TOOL - Tạo mã QR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        :root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --background-color: #f0f9ff;
+    --card-background: #ffffff;
+    --text-color: #1f2937;
+    --border-color: #e5e7eb;
+    --input-background: #ffffff;
+    --result-background: #f3f4f6;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --modal-background: rgba(0, 0, 0, 0.5);
+    --button-secondary: #e5e7eb;
+    --navbar-background: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding-top: 60px;
+}
+
+
+/* 
+.navbar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.5rem;
+} */
+
+.__name {
+    margin-left: 1rem;
+    font-weight: 500;
+}
+
+.logout {
+    margin-left: auto;
+    color: #dc2626;
+    text-decoration: none;
+    padding: 0.5rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.qr-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: var(--card-background);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.input-section {
+    padding-right: 2rem;
+    border-right: 1px solid var(--border-color);
+}
+
+/* h1 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    text-align: center;
+} */
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--input-background);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.file-upload {
+    position: relative;
+    width: 100%;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.file-label:hover {
+    border-color: var(--primary-color);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.file-label i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.qr-options {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+button {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+button.primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+button.secondary {
+    background: var(--button-secondary);
+    color: var(--text-color);
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.preview-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.qr-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--result-background);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.placeholder {
+    text-align: center;
+    color: #9ca3af;
+}
+
+.placeholder i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: var(--card-background);
+    padding-top: 60px;
+    transition: 0.3s;
+    box-shadow: var(--shadow);
+    z-index: 999;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    color: var(--text-color);
+    text-decoration: none;
+    gap: 1rem;
+    transition: all 0.2s ease;
+}
+
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 998;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+#sizeValue {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+@media (max-width: 968px) {
+    .qr-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .input-section {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 2rem;
+    }
+
+    .preview-section {
+        padding-top: 2rem;
+    }
+
+    .qr-preview {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .qr-container {
+        padding: 1.5rem;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <a href="" class="logout">
+            <i class="fas fa-right-from-bracket"></i>
+        </a>
+        <p class="__name">Thành Đạt</p>
+        <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link active"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
+        <a href="account.html" class="sidebar-link"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="contact.html" class="sidebar-link"><i class="fas fa-address-book"></i>Liên hệ</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <!-- <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label> -->
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg5" onchange="selectBackground('bg5')" />
+                <span class="background-image bg5"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg6" onchange="selectBackground('bg6')" />
+                <span class="background-image bg6"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg7" onchange="selectBackground('bg7')" />
+                <span class="background-image bg7"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg8" onchange="selectBackground('bg8')" />
+                <span class="background-image bg8"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg9" onchange="selectBackground('bg9')" />
+                <span class="background-image bg9"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg10" onchange="selectBackground('bg10')" />
+                <span class="background-image bg10"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <!-- Modal tùy chỉnh -->
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="qr-container">
+            <div class="input-section">
+                <h1>QR Code</h1>
+                
+                <div class="input-group">
+                    <label for="qrType">Kiểu nội dung QR</label>
+                    <select id="qrType" onchange="switchInputType()">
+                        <option value="text">Text</option>
+                        <option value="url">URL</option>
+                        <option value="wifi">WiFi Network</option>
+                    </select>
+                </div>
+
+                <div id="inputFields">
+                    <div class="input-group" id="textInput">
+                        <label for="textContent">Nhập văn bản</label>
+                        <textarea id="textContent" rows="4" placeholder="Nhập văn bản tại đây" oninput="generateQR()"></textarea>
+                    </div>
+
+                    <div class="input-group hidden" id="urlInput">
+                        <label for="urlContent">Nhập URL</label>
+                        <input type="url" id="urlContent" placeholder="https://example.com" oninput="generateQR()">
+                    </div>
+
+                    <div class="input-group hidden" id="wifiInput">
+                        <label for="ssid">Tên Mạng (SSID)</label>
+                        <input type="text" id="ssid" placeholder="Network Name" oninput="generateQR()">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" placeholder="Network Password" oninput="generateQR()">
+                        <label for="encryption">Sự mã hóa (mặc định)</label>
+                        <select id="encryption" onchange="generateQR()">
+                            <option value="WPA">WPA/WPA2</option>
+                            <option value="WEP">WEP</option>
+                            <option value="nopass">No Encryption</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="qr-options">
+                    <div class="input-group">
+                        <label for="errorCorrection">Mức độ sửa lỗi</label>
+                        <select id="errorCorrection" onchange="generateQR()">
+                            <option value="L">Low (7%)</option>
+                            <option value="M" selected>Medium (15%)</option>
+                            <option value="Q">Quartile (25%)</option>
+                            <option value="H">High (30%)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="qrSize">Kích cỡ QR</label>
+                        <input type="range" id="qrSize" min="100" max="400" value="200" step="50" oninput="generateQR()">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="secondary" onclick="downloadQR()">Tải xuống</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="qr-preview">
+                    <div id="qrResult">
+                        <div class="placeholder">
+                            <i class="fas fa-qrcode"></i>
+                            <p>QR Code sẽ được xuất hiện tại đây</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
+ 
+    <script src="../renderer.js"></script>
+    <script src="./scriptsHTML_main.js"></script>
+    <script>
+         function switchInputType() {
+            const qrType = document.getElementById('qrType').value;
+            const inputFields = document.getElementById('inputFields').children;
+            
+            for (let field of inputFields) {
+                field.classList.add('hidden');
+            }
+            
+            switch (qrType) {
+                case 'text':
+                    document.getElementById('textInput').classList.remove('hidden');
+                    break;
+                case 'url':
+                    document.getElementById('urlInput').classList.remove('hidden');
+                    break;
+                case 'wifi':
+                    document.getElementById('wifiInput').classList.remove('hidden');
+                    break;
+            }
+            generateQR();
+        }
+
+        async function generateQR() {
+            const qrType = document.getElementById('qrType').value;
+            const errorCorrection = document.getElementById('errorCorrection').value;
+            const size = document.getElementById('qrSize').value;
+            let content = '';
+
+            switch (qrType) {
+                case 'text':
+                    content = document.getElementById('textContent').value;
+                    break;
+                case 'url':
+                    content = document.getElementById('urlContent').value;
+                    break;
+                case 'wifi':
+                    const ssid = document.getElementById('ssid').value;
+                    const password = document.getElementById('password').value;
+                    const encryption = document.getElementById('encryption').value;
+                    if (ssid) {
+                        content = `WIFI:T:${encryption};S:${ssid};P:${password};;`;
+                    }
+                    break;
+            }
+
+            if (!content) {
+                const qrResult = document.getElementById('qrResult');
+                qrResult.innerHTML = `
+                    <div class="placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <p>QR Code sẽ được tạo tức thì tại đây</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const result = await window.electronAPI.ipcRenderer.generateQR({
+                    content,
+                    errorCorrection,
+                    size
+                });
+
+                if (result.success) {
+                    const qrResult = document.getElementById('qrResult');
+                    qrResult.innerHTML = `
+                        <img src="${result.dataUrl}" alt="Generated QR Code" style="max-width: 100%; height: auto;">
+                    `;
+                }
+            } catch (error) {
+                console.error('Error generating QR code:', error);
+            }
+        }
+
+        async function downloadQR() {
+            const qrType = document.getElementById('qrType').value;
+            const errorCorrection = document.getElementById('errorCorrection').value;
+            const size = document.getElementById('qrSize').value;
+            let content = '';
+
+            switch (qrType) {
+                case 'text':
+                    content = document.getElementById('textContent').value;
+                    break;
+                case 'url':
+                    content = document.getElementById('urlContent').value;
+                    break;
+                case 'wifi':
+                    const ssid = document.getElementById('ssid').value;
+                    const password = document.getElementById('password').value;
+                    const encryption = document.getElementById('encryption').value;
+                    content = `WIFI:T:${encryption};S:${ssid};P:${password};;`;
+                    break;
+            }
+
+            if (!content) {
+                showModal("Không nhập nội dung à thằng điên")
+                return;
+            }
+
+            try {
+                const result = await window.electronAPI.ipcRenderer.downloadQR({
+                    content,
+                    errorCorrection,
+                    size,
+                    filePath: `qrcode-${Date.now()}.png`
+                });
+
+                if (result.success) {
+                    showModal("QR Code đã tải về thành công")
+                } else {
+                    showModal('Có lỗi trong quá trình tải QR code: ' + result.error);
+
+                }
+            } catch (error) {
+                showModal('Có lỗi trong quá trình tải QR code: ' + error.message);
+            }
+        }
+
+        // Initialize QR code generation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQR();
+        });
+
+
+    </script>
+    <script src="./scriptsHTML_main.js"></script>
+
+</body>
+</html>

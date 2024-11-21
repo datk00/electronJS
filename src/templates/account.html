@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIK TOOL - Tài khoản</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root[data-theme="light"] {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f0f9ff;
+            --card-background: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --input-background: #ffffff;
+            --result-background: #f3f4f6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --modal-background: rgba(0, 0, 0, 0.5);
+            --button-secondary: #e5e7eb;
+            --navbar-background: #ffffff;
+            --avatar-border: #e5e7eb;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --background-color: #111827;
+            --card-background: #1f2937;
+            --text-color: #f3f4f6;
+            --border-color: #374151;
+            --input-background: #374151;
+            --result-background: #272f3d;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --modal-background: rgba(0, 0, 0, 0.7);
+            --button-secondary: #374151;
+            --navbar-background: #1f2937;
+            --avatar-border: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding-top: 40px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 0.5rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-toggle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .navbar-toggle:hover {
+            background-color: var(--border-color);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: var(--card-background);
+            padding-top: 3rem;
+            transition: 0.3s;
+            box-shadow: var(--shadow);
+            z-index: 999;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: 0.2s;
+            gap: 1rem;
+        }
+
+        .sidebar-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .profile-section {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .avatar-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid var(--avatar-border);
+            object-fit: cover;
+            background-color: var(--result-background);
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .avatar-upload:hover {
+            background: var(--secondary-color);
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            display: inline;
+        }
+
+        .password-section {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--input-background);
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 998;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .profile-section,
+            .password-section {
+                padding: 1.5rem;
+            }
+
+            .avatar-container {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        .logout {
+            padding: 10px;
+            color: #dc2626;
+            margin-left: 10px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        } 
+        .__name {
+            position: absolute;
+            top: 10px;
+            left: 19%;
+        } 
+        .sidebar-link:hover, .sidebar-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+    </style>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <button class="navbar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="" class="logout">
+            <i class="fas fa-right-from-bracket"></i>
+        </a>
+        <p class="__name">Thành Đạt</p>
+        <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="quy_doi.html" class="sidebar-link"><i class="fas fa-exchange-alt"></i>Quy đổi</a>
+        <a href="tao_ma.html" class="sidebar-link"><i class="fas fa-qrcode"></i>Tạo mã</a>
+        <a href="mriz.html" class="sidebar-link"><i class="fas fa-magic"></i>Mriz</a>
+        <a href="thue.html" class="sidebar-link"><i class="fas fa-tarp"></i>Thuế</a>
+        <a href="account.html" class="sidebar-link active"><i class="fas fa-user"></i>Tài khoản</a>
+        <a href="contact.html" class="sidebar-link"><i class="fas fa-address-book"></i>Liên hệ</a>
+        <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i>Cài đặt</a>
+        <div class="background-selector">
+            <!-- <label class="background-option">
+                <input type="radio" name="background" value="default" onchange="selectBackground('default')" />
+                <span class="background-image default"></span>
+            </label> -->
+            <label class="background-option">
+                <input type="radio" name="background" value="bg1" onchange="selectBackground('bg1')" />
+                <span class="background-image bg1"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg5" onchange="selectBackground('bg5')" />
+                <span class="background-image bg5"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg3" onchange="selectBackground('bg3')" />
+                <span class="background-image bg3"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg4" onchange="selectBackground('bg4')" />
+                <span class="background-image bg4"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg6" onchange="selectBackground('bg6')" />
+                <span class="background-image bg6"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg7" onchange="selectBackground('bg7')" />
+                <span class="background-image bg7"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg8" onchange="selectBackground('bg8')" />
+                <span class="background-image bg8"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg9" onchange="selectBackground('bg9')" />
+                <span class="background-image bg9"></span>
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background" value="bg10" onchange="selectBackground('bg10')" />
+                <span class="background-image bg10"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <div id="customModal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()" class="primary">Đồng ý</button>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="avatar-container">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="avatar" id="userAvatar">
+                <label for="avatarUpload" class="avatar-upload">
+                    <i class="fas fa-camera"></i>
+                </label>
+                <input type="file" id="avatarUpload" hidden accept="image/*">
+
+                
+            </div>
+            <h2 class="welcome-text">Hi, <span id="userName">Người dùng</span></h2>
+<i style="display: inline-block; color: #60A5FA; padding: 5px; cursor: pointer;" class="fas fa-pen-to-square" onclick="editUserName()"></i>
+        </div>
+
+        <!-- Password Change Section -->
+        <div class="password-section">
+            <h3 class="section-title">Đổi Mật Khẩu</h3>
+            <form id="passwordForm" onsubmit="return changePassword(event)">
+                <div class="form-group">
+                    <label for="currentPassword">Mật khẩu hiện tại</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Mật khẩu mới</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn">Cập nhật mật khẩu</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showModal(message) {
+            const modal = document.getElementById('customModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+        }
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Xử lý đổi avatar
+        document.getElementById('avatarUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Lưu ảnh dưới dạng chuỗi Base64 vào localStorage
+            const avatarBase64 = e.target.result;
+            localStorage.setItem('userAvatar', avatarBase64);
+            
+            // Cập nhật ảnh người dùng
+            document.getElementById('userAvatar').src = avatarBase64;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Khi tải lại trang, kiểm tra xem có ảnh nào đã được lưu trong localStorage không
+window.addEventListener('load', function() {
+    const savedAvatar = localStorage.getItem('userAvatar');
+    if (savedAvatar) {
+        document.getElementById('userAvatar').src = savedAvatar;
+    }
+});
+
+        // Xử lý đổi mật khẩu
+        function changePassword(event) {
+            event.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showModal("Mật khẩu mới không khớp")
+                return false;
+            }
+
+            // Thêm logic xử lý đổi mật khẩu ở đây
+            showModal("Liên hệ admin để thực hiện.")
+            event.target.reset();
+            return false;
+        }
+
+        // Cập nhật tên người dùng từ localStorage hoặc API
+        function updateUserName() {
+            const userName = localStorage.getItem('userName') || 'Người dùng';
+            document.getElementById('userName').textContent = userName;
+        }
+
+        // Gọi hàm khi trang được tải
+        updateUserName();
+    </script>
+    <script src="scriptsHTML_main.js"></script>
+    <script>
+// Hàm để chỉnh sửa tên người dùng
+        function editUserName() {
+            const userNameSpan = document.getElementById('userName');
+            const currentName = userNameSpan.textContent;  // Lấy tên hiện tại
+            
+            // Chuyển span thành input để chỉnh sửa
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentName;  // Gán giá trị hiện tại vào input
+            userNameSpan.innerHTML = '';  // Xóa nội dung của span
+
+            // Thêm input vào trong span
+            userNameSpan.appendChild(input);
+            
+            // Đặt focus vào input để người dùng có thể gõ luôn
+            input.focus();
+
+            // Khi người dùng nhấn Enter hoặc mất focus (blur) thì lưu giá trị
+            input.addEventListener('blur', saveUserName);
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveUserName();
+                }
+            });
+        }
+
+        // Hàm lưu tên người dùng sau khi chỉnh sửa
+        function saveUserName() {
+            const userNameSpan = document.getElementById('userName');
+            const input = userNameSpan.querySelector('input');  // Lấy input vừa tạo
+
+            if (input) {
+                const newName = input.value.trim();  // Lấy giá trị của input
+                if (newName !== '') {
+                    userNameSpan.innerHTML = newName;  // Cập nhật giá trị mới vào span
+                    // Lưu tên mới vào localStorage
+                    localStorage.setItem('userName', newName);
+                } else {
+                    userNameSpan.innerHTML = 'Người dùng';  // Nếu giá trị rỗng thì mặc định là "Người dùng"
+                    // Lưu giá trị mặc định vào localStorage
+                    localStorage.setItem('userName', 'Người dùng');
+                }
+            }
+        }
+
+        // Khi tải lại trang, kiểm tra xem có tên người dùng đã lưu trong localStorage không
+        window.addEventListener('load', function() {
+            const savedName = localStorage.getItem('userName');
+            if (savedName) {
+                // Nếu có tên trong localStorage, hiển thị tên đó
+                document.getElementById('userName').textContent = savedName;
+            } else {
+                // Nếu không có, hiển thị tên mặc định
+                document.getElementById('userName').textContent = 'Người dùng';
+            }
+        });
+
+
+    </script>
+</body>
+</html>
