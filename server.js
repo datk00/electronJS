@@ -94,6 +94,15 @@ async function createWindow() {
 }
 
 // Lắng nghe sự kiện IPC từ renderer process
+
+ipcMain.on('getVersionApp', async (event, data) => {
+    const appVersion = app.getVersion()
+    event.reply('getVersionApp', {
+        appVersion
+    })
+})
+
+
 ipcMain.on('test', async (event, value) => {
     const isPinned = await db.getData("/isPinned");
     const autoStart = await  db.getData("/autoStart");
